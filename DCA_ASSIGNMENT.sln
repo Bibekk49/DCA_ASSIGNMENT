@@ -2,8 +2,6 @@
 Microsoft Visual Studio Solution File, Format Version 12.00
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Documentation", "Documentation", "{29D539E0-32E9-416F-B2A9-283B1442C5AF}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Assignment1", "Assignment1", "{920FB472-799E-4B33-903A-8D07B958DBF3}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Assignment1", "Assignment1\Assignment1.csproj", "{6BE1B608-1785-4F7C-9CC8-6A8F6B4A3F9B}"
 EndProject
 Global
@@ -12,7 +10,6 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
-		{920FB472-799E-4B33-903A-8D07B958DBF3} = {29D539E0-32E9-416F-B2A9-283B1442C5AF}
 		{6BE1B608-1785-4F7C-9CC8-6A8F6B4A3F9B} = {29D539E0-32E9-416F-B2A9-283B1442C5AF}
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
