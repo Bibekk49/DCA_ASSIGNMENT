@@ -6,7 +6,6 @@ namespace UnitTests.ViaEvent;
 
 public class UpdateEventTitleTests
 {
-    // UC2.S1 — valid title → title updated
     [Theory]
     [InlineData("Scary Movie Night!")]
     [InlineData("Graduation Gala")]
