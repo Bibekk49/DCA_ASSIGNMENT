@@ -2,19 +2,20 @@ using DCA_ASSIGNMENT.Core.Domain.Common.Bases;
 using DCA_ASSIGNMENT.Core.Tools.OperationResult;
 
 namespace DCA_ASSIGNMENT.Core.Domain.Common.Values.Event;
-
-public sealed class EventId : ValueObject
+public sealed class EventId
 {
     public Guid Value { get; }
 
-    private EventId(Guid value) => Value = value;
+    private EventId(Guid eventId) => Value = eventId;
 
-    public static Result<EventId> New() => new Success<EventId>(new EventId(Guid.NewGuid()));
-
-    public static EventId FromGuid(Guid id) => new(id);
-
-    protected override IEnumerable<object> GetEqualityComponents()
+    public static Result<EventId> Create(Guid value)
     {
-        yield return Value;
+        if (value == Guid.Empty)
+            return new ResultError("event_id.empty", "EventId cannot be empty.", "validation");
+
+        return new EventId(value);
     }
+
+    public static Result<EventId> New()
+        => Create(Guid.NewGuid());
 }
