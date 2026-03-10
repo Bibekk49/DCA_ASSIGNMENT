@@ -1,8 +1,10 @@
 using DCA_ASSIGNMENT.Core.Domain.Common.Bases;
+using DCA_ASSIGNMENT.Core.Domain.Common.Values.Event;
+using DCA_ASSIGNMENT.Core.Tools.OperationResult;
 
 namespace DCA_ASSIGNMENT.Core.Domain.Aggregates.Events;
 
-public class ViaEvent
+public class ViaEvent: IDEntity<EventId>
 {
     public EventTitle title { get; }
 
@@ -44,7 +46,10 @@ public class ViaEvent
 
     public Result<None> UpdateTitle(EventTitle newTitle)
     {
-        Title = newTitle;
+        Result<EventTitle> title = EventTitle.Create(newTitle.Value);
+        if (title is Failure<EventTitle> titleFailure)
+            return ResultHelpers.Failure<None>(titleFailure.Errors);
+        
         return ResultHelpers.Success();
     }
 }
