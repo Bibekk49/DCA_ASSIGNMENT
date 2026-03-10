@@ -2,7 +2,7 @@ using DCA_ASSIGNMENT.Core.Domain.Common.Bases;
 using DCA_ASSIGNMENT.Core.Tools.OperationResult;
 
 namespace DCA_ASSIGNMENT.Core.Domain.Common.Values.Event;
-public sealed class EventId : ValueObject
+public sealed class EventId
 {
     public Guid Value { get; }
 

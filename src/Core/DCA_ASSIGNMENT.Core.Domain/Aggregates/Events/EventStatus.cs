@@ -1,6 +1,9 @@
 namespace DCA_ASSIGNMENT.Core.Domain.Aggregates.Events;
 
-public enum EventStatuts
+public enum EventStatus
 {
-    
+    CREATED,
+    DRAFT,
+    COMPLETED,
+    CANCELLED
 }

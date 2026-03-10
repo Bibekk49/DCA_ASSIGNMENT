@@ -15,7 +15,7 @@ public class CreateEventAggregateUnitTests
         var evt = success.Value;
 
         Assert.NotEqual(Guid.Empty, evt.Id.Value);
-        Assert.Equal(EventStatus.Draft, evt.Status);
-        Assert.Equal(5, evt.MaxGuests.Value);
+        Assert.Equal(EventStatus.DRAFT, evt.status);
+        Assert.Equal(5, evt.maxGuestNumber.Value);
     }
 }
