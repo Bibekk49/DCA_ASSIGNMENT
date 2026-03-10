@@ -1,11 +1,9 @@
-<<<<<<< Updated upstream
-=======
 using DCA_ASSIGNMENT.Core.Domain.Common.Bases;
 using DCA_ASSIGNMENT.Core.Domain.Common.Values.Event;
 using DCA_ASSIGNMENT.Core.Tools.OperationResult;
 
->>>>>>> Stashed changes
 namespace DCA_ASSIGNMENT.Core.Domain.Aggregates.Events;
+
 
 public class ViaEvent : IDEntity<EventId>
 {
