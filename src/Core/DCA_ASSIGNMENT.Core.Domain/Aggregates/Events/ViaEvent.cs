@@ -1,6 +1,6 @@
 namespace DCA_ASSIGNMENT.Core.Domain.Aggregates.Events;
 
-public class ViaEvent : Entity<EventId>
+public class ViaEvent : IDEntity<EventId>
 {
     private ViaEvent(EventId id) : base(id) { }
 
