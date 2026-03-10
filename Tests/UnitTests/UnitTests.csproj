@@ -23,4 +23,13 @@
       <ProjectReference Include="..\..\src\Core\Tools\DCA_ASSIGNMENT.Core.Tools.OperationResult\DCA_ASSIGNMENT.Core.Tools.OperationResult.csproj" />
     </ItemGroup>
 
+    <ItemGroup>
+      <Folder Include="Features\Events\CreateEvent\" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\..\src\Core\DCA_ASSIGNMENT.Core.Domain\DCA_ASSIGNMENT.Core.Domain.csproj" />
+      <ProjectReference Include="..\..\src\Core\Tools\DCA_ASSIGNMENT.Core.Tools.OperationResult\DCA_ASSIGNMENT.Core.Tools.OperationResult.csproj" />
+    </ItemGroup>
+
 </Project>
