@@ -10,4 +10,12 @@
       <Folder Include="Services\" />
     </ItemGroup>
 
+    <ItemGroup>
+      <ProjectReference Include="..\Tools\DCA_ASSIGNMENT.Core.Tools.OperationResult\DCA_ASSIGNMENT.Core.Tools.OperationResult.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\Tools\DCA_ASSIGNMENT.Core.Tools.OperationResult\DCA_ASSIGNMENT.Core.Tools.OperationResult.csproj" />
+    </ItemGroup>
+
 </Project>
