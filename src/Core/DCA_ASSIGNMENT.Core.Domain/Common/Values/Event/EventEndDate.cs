@@ -6,7 +6,7 @@ namespace DCA_ASSIGNMENT.Core.Domain.Common.Values.Event;
 
 public sealed class EventEndDate : ValueObject
 {
-    public DateTime Value { get; }
+    public DateTime nValue { get; }
 
     private EventEndDate(DateTime endDate) => Value = endDate;
 

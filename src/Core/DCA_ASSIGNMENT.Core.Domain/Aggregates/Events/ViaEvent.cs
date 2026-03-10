@@ -1,3 +1,5 @@
+using DCA_ASSIGNMENT.Core.Domain.Common.Bases;
+
 namespace DCA_ASSIGNMENT.Core.Domain.Aggregates.Events;
 
 public class ViaEvent : IDEntity<EventId>
