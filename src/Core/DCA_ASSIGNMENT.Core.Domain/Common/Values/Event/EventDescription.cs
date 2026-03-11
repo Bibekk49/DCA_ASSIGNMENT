@@ -1,3 +1,4 @@
+using DCA_ASSIGNMENT.Core.Domain.Aggregates.Events;
 using DCA_ASSIGNMENT.Core.Domain.Common.Bases;
 using DCA_ASSIGNMENT.Core.Tools.OperationResult;
 using static DCA_ASSIGNMENT.Core.Tools.OperationResult.ResultHelpers;
@@ -35,11 +36,12 @@ public sealed class EventDescription : ValueObject
 
     private static Result<None> ValidateNotEmpty(string description) =>
         string.IsNullOrWhiteSpace(description)
-            ? new ResultError("EventDescription.Empty", "Event description cannot be empty.", "Validation")
+            ? EventErrors.Description.DescriptionEmpty
             : Success();
 
     private static Result<None> ValidateMaxLength(string description) =>
         !string.IsNullOrWhiteSpace(description) && description.Length > MaxLength
-            ? new ResultError("EventDescription.TooLong", $"Event description cannot exceed {MaxLength} characters.", "Validation")
+            ? EventErrors.Description.DescriptionTooLong
             : Success();
 }
+

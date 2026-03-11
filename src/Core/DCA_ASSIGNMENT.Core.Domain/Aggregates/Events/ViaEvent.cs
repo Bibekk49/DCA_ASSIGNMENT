@@ -6,17 +6,17 @@ namespace DCA_ASSIGNMENT.Core.Domain.Aggregates.Events;
 
 public class ViaEvent: EntityBase<EventId>
 {
-    public EventTitle title { get; }
+    public EventTitle Title { get; private set; }
 
-    public EventStatus status { get; }
-    public EventMaxGuests maxGuestNumber { get; }
+    public EventStatus Status { get; private set; }
+    public EventMaxGuests MaxGuestNumber { get; private set; }
 
     
     private ViaEvent(EventId id, EventStatus eventStatus, EventMaxGuests eventMaxGuests, EventTitle eventTitle) : base(id)
     {
-        status = eventStatus;
-        maxGuestNumber = eventMaxGuests;
-        title = eventTitle;
+        Status = eventStatus;
+        MaxGuestNumber = eventMaxGuests;
+        Title = eventTitle;
     }
 
     public static Result<ViaEvent> Create()
@@ -46,10 +46,27 @@ public class ViaEvent: EntityBase<EventId>
 
     public Result<None> UpdateTitle(EventTitle newTitle)
     {
-        Result<EventTitle> title = EventTitle.Create(newTitle.Value);
-        if (title is Failure<EventTitle> titleFailure)
-            return ResultHelpers.Failure<None>(titleFailure.Errors);
-        
+        if (Status == EventStatus.CANCELLED)
+            return EventErrors.Status.CannotModifyCancelled;
+
+        if (Status != EventStatus.DRAFT)
+            return EventErrors.Status.CannotModifyActive;
+
+        Title = newTitle;
         return ResultHelpers.Success();
+    }
+
+    public Result<None> Cancel()
+    {
+        if (Status == EventStatus.CANCELLED)
+            return EventErrors.Status.CannotModifyCancelled;
+
+        Status = EventStatus.CANCELLED;
+        return ResultHelpers.Success();
+    }
+
+    internal void SetStatusForTesting(EventStatus status)
+    {
+        Status = status;
     }
 }
