@@ -1,21 +1,18 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
-
+<Project Sdk="Microsoft.NET.Sdk">
     <PropertyGroup>
         <TargetFramework>net10.0</TargetFramework>
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
     </PropertyGroup>
-
     <ItemGroup>
       <Folder Include="Services\" />
     </ItemGroup>
-
     <ItemGroup>
       <ProjectReference Include="..\Tools\DCA_ASSIGNMENT.Core.Tools.OperationResult\DCA_ASSIGNMENT.Core.Tools.OperationResult.csproj" />
     </ItemGroup>
-
     <ItemGroup>
-      <ProjectReference Include="..\Tools\DCA_ASSIGNMENT.Core.Tools.OperationResult\DCA_ASSIGNMENT.Core.Tools.OperationResult.csproj" />
+      <AssemblyAttribute Include="System.Runtime.CompilerServices.InternalsVisibleTo">
+        <_Parameter1>UnitTests</_Parameter1>
+      </AssemblyAttribute>
     </ItemGroup>
-
 </Project>

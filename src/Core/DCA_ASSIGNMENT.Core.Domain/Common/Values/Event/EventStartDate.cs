@@ -1,6 +1,6 @@
 using DCA_ASSIGNMENT.Core.Domain.Common.Bases;
 using DCA_ASSIGNMENT.Core.Tools.OperationResult;
-using static DCA_ASSIGNMENT.Core.Tools.OperationResult.ResultHelpers;
+using static DCA_ASSIGNMENT.Core.Tools.OperationResult.ResultHelper;
 
 namespace DCA_ASSIGNMENT.Core.Domain.Common.Values.Event;
 

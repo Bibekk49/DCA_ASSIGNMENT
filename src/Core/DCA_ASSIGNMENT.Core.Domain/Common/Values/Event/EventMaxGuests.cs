@@ -1,6 +1,7 @@
+using DCA_ASSIGNMENT.Core.Domain.Aggregates.Events;
 using DCA_ASSIGNMENT.Core.Domain.Common.Bases;
 using DCA_ASSIGNMENT.Core.Tools.OperationResult;
-using static DCA_ASSIGNMENT.Core.Tools.OperationResult.ResultHelpers;
+using static DCA_ASSIGNMENT.Core.Tools.OperationResult.ResultHelper;
 
 namespace DCA_ASSIGNMENT.Core.Domain.Common.Values.Event;
 
@@ -32,6 +33,7 @@ public sealed class EventMaxGuests : ValueObject
 
     private static Result<None> ValidateMinGuests(int maxGuests) =>
         maxGuests < MinGuests
-            ? new ResultError("EventMaxGuests.TooLow", $"Maximum guests must be at least {MinGuests}.", "Validation")
+            ? EventErrors.MaxGuests.TooLow
             : Success();
 }
+

@@ -4,24 +4,19 @@ using DCA_ASSIGNMENT.Core.Tools.OperationResult;
 
 namespace DCA_ASSIGNMENT.Core.Domain.Aggregates.Events;
 
-public class ViaEvent : IDEntity<EventId>
+public class ViaEvent: EntityBase<EventId>
 {
-    public EventTitle title { get; }
-    public EventStatus status { get; private set; }
-    public EventMaxGuests maxGuestNumber { get; }
-    public EventDescription description { get; private set; }
+    public EventTitle Title { get; private set; }
 
-    private ViaEvent(
-        EventId id,
-        EventStatus eventStatus,
-        EventMaxGuests eventMaxGuests,
-        EventTitle eventTitle,
-        EventDescription eventDescription) : base(id)
+    public EventStatus Status { get; private set; }
+    public EventMaxGuests MaxGuestNumber { get; private set; }
+
+    
+    private ViaEvent(EventId id, EventStatus eventStatus, EventMaxGuests eventMaxGuests, EventTitle eventTitle) : base(id)
     {
-        status = eventStatus;
-        maxGuestNumber = eventMaxGuests;
-        title = eventTitle;
-        description = eventDescription;
+        Status = eventStatus;
+        MaxGuestNumber = eventMaxGuests;
+        Title = eventTitle;
     }
 
     public static Result<ViaEvent> Create()
@@ -29,57 +24,53 @@ public class ViaEvent : IDEntity<EventId>
         Result<EventId> idResult = EventId.New();
 
         if (idResult is Failure<EventId> f)
-            return ResultHelpers.Failure<ViaEvent>(f.Errors);
+            return ResultHelper.Failure<ViaEvent>(f.Errors);
 
         var id = ((Success<EventId>)idResult).Value;
 
-        Result<EventMaxGuests> maxGuest = EventMaxGuests.Create(5);
+        Result<EventMaxGuests> maxGuest =EventMaxGuests.Create(5);
 
         if (maxGuest is Failure<EventMaxGuests> maxGuestFailure)
-            return ResultHelpers.Failure<ViaEvent>(maxGuestFailure.Errors);
+            return ResultHelper.Failure<ViaEvent>(maxGuestFailure.Errors);
 
         var maxGuests = ((Success<EventMaxGuests>)maxGuest).Value;
 
         Result<EventTitle> eventTitle = EventTitle.Create("Working Title");
-
         if (eventTitle is Failure<EventTitle> eventTitleFailure)
-            return ResultHelpers.Failure<ViaEvent>(eventTitleFailure.Errors);
+            return ResultHelper.Failure<ViaEvent>(eventTitleFailure.Errors);
 
         var title = ((Success<EventTitle>)eventTitle).Value;
 
-        Result<EventDescription> eventDescription = EventDescription.Create(string.Empty);
-
-        if (eventDescription is Failure<EventDescription> eventDescriptionFailure)
-            return ResultHelpers.Failure<ViaEvent>(eventDescriptionFailure.Errors);
-
-        var description = ((Success<EventDescription>)eventDescription).Value;
-
-        return ResultHelpers.Success(new ViaEvent(id, EventStatus.DRAFT, maxGuests, title, description));
+        return ResultHelper.Success(new ViaEvent(id,EventStatus.DRAFT, maxGuests, title));
     }
 
     public Result<None> UpdateTitle(EventTitle newTitle)
     {
-        Result<EventTitle> title = EventTitle.Create(newTitle.Value);
+        if (Status == EventStatus.CANCELLED)
+            return EventErrors.Status.CannotModifyCancelled;
 
-        if (title is Failure<EventTitle> titleFailure)
-            return ResultHelpers.Failure<None>(titleFailure.Errors);
+        if (Status is EventStatus.ACTIVE or EventStatus.COMPLETED)
+            return EventErrors.Status.CannotModifyActive;
 
-        return ResultHelpers.Success();
+        Title = newTitle;
+
+        if (Status == EventStatus.READY)
+            Status = EventStatus.DRAFT;
+
+        return ResultHelper.Success();
     }
 
-    public Result<None> UpdateDescription(EventDescription newDescription)
+    public Result<None> Cancel()
     {
-        if (status == EventStatus.ACTIVE)
-            return ResultHelpers.Failure<None>(EventErrors.Status.CannotModifyActive);
+        if (Status == EventStatus.CANCELLED)
+            return EventErrors.Status.CannotModifyCancelled;
 
-        if (status == EventStatus.CANCELLED)
-            return ResultHelpers.Failure<None>(EventErrors.Status.CannotModifyCancelled);
+        Status = EventStatus.CANCELLED;
+        return ResultHelper.Success();
+    }
 
-        description = newDescription;
-
-        if (status == EventStatus.READY)
-            status = EventStatus.DRAFT;
-
-        return ResultHelpers.Success();
+    internal void SetStatusForTesting(EventStatus status)
+    {
+        Status = status;
     }
 }
