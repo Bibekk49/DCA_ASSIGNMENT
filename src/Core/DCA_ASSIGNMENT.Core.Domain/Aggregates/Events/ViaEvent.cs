@@ -24,24 +24,24 @@ public class ViaEvent: EntityBase<EventId>
         Result<EventId> idResult = EventId.New();
 
         if (idResult is Failure<EventId> f)
-            return ResultHelpers.Failure<ViaEvent>(f.Errors);
+            return ResultHelper.Failure<ViaEvent>(f.Errors);
 
         var id = ((Success<EventId>)idResult).Value;
-        
+
         Result<EventMaxGuests> maxGuest =EventMaxGuests.Create(5);
-        
+
         if (maxGuest is Failure<EventMaxGuests> maxGuestFailure)
-            return ResultHelpers.Failure<ViaEvent>(maxGuestFailure.Errors);
-         
+            return ResultHelper.Failure<ViaEvent>(maxGuestFailure.Errors);
+
         var maxGuests = ((Success<EventMaxGuests>)maxGuest).Value;
-        
+
         Result<EventTitle> eventTitle = EventTitle.Create("Working Title");
         if (eventTitle is Failure<EventTitle> eventTitleFailure)
-            return ResultHelpers.Failure<ViaEvent>(eventTitleFailure.Errors);
-        
+            return ResultHelper.Failure<ViaEvent>(eventTitleFailure.Errors);
+
         var title = ((Success<EventTitle>)eventTitle).Value;
-        
-        return ResultHelpers.Success(new ViaEvent(id,EventStatus.DRAFT, maxGuests, title));
+
+        return ResultHelper.Success(new ViaEvent(id,EventStatus.DRAFT, maxGuests, title));
     }
 
     public Result<None> UpdateTitle(EventTitle newTitle)
@@ -53,7 +53,7 @@ public class ViaEvent: EntityBase<EventId>
             return EventErrors.Status.CannotModifyActive;
 
         Title = newTitle;
-        return ResultHelpers.Success();
+        return ResultHelper.Success();
     }
 
     public Result<None> Cancel()
@@ -62,7 +62,7 @@ public class ViaEvent: EntityBase<EventId>
             return EventErrors.Status.CannotModifyCancelled;
 
         Status = EventStatus.CANCELLED;
-        return ResultHelpers.Success();
+        return ResultHelper.Success();
     }
 
     internal void SetStatusForTesting(EventStatus status)
