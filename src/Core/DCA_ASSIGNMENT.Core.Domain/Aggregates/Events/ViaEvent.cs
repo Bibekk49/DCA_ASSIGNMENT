@@ -4,7 +4,7 @@ using DCA_ASSIGNMENT.Core.Tools.OperationResult;
 
 namespace DCA_ASSIGNMENT.Core.Domain.Aggregates.Events;
 
-public class ViaEvent: IDEntity<EventId>
+public class ViaEvent: EntityBase<EventId>
 {
     public EventTitle title { get; }
 
