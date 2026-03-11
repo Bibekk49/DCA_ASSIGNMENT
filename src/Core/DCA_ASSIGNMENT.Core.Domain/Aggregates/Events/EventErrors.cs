@@ -14,6 +14,11 @@ public static class EventErrors
         public static readonly ResultError TitleEmpty =
             new("EventTitle.Empty", "Event title cannot be empty.", "Validation");
     }
+    public static class Description
+    {
+        public static readonly ResultError DescriptionTooLong =
+            new("EventDescription.TooLong", "Event description cannot exceed 250 characters.", "Validation");
+    }
 
     public static class Status
     {
