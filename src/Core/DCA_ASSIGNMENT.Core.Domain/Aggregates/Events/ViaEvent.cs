@@ -49,10 +49,14 @@ public class ViaEvent: EntityBase<EventId>
         if (Status == EventStatus.CANCELLED)
             return EventErrors.Status.CannotModifyCancelled;
 
-        if (Status != EventStatus.DRAFT)
+        if (Status is EventStatus.ACTIVE or EventStatus.COMPLETED)
             return EventErrors.Status.CannotModifyActive;
 
         Title = newTitle;
+
+        if (Status == EventStatus.READY)
+            Status = EventStatus.DRAFT;
+
         return ResultHelper.Success();
     }
 
