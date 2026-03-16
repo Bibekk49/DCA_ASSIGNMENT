@@ -4,6 +4,8 @@ public enum EventStatus
 {
     CREATED,
     DRAFT,
+    READY,
+    ACTIVE,
     COMPLETED,
     CANCELLED
 }
