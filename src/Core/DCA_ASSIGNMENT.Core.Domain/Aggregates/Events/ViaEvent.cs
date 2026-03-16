@@ -6,17 +6,20 @@ namespace DCA_ASSIGNMENT.Core.Domain.Aggregates.Events;
 
 public class ViaEvent: EntityBase<EventId>
 {
-    public EventTitle Title { get; private set; }
-
-    public EventStatus Status { get; private set; }
-    public EventMaxGuests MaxGuestNumber { get; private set; }
+    public EventTitle title { get; }
+    public EventDescription description { get; }
+    public EventStatus status { get; }
+    public EventMaxGuests maxGuestNumber { get; }
+    public EventVisibility visibility { get; }
 
     
-    private ViaEvent(EventId id, EventStatus eventStatus, EventMaxGuests eventMaxGuests, EventTitle eventTitle) : base(id)
+    private ViaEvent(EventId id, EventStatus eventStatus, EventMaxGuests eventMaxGuests, EventTitle eventTitle, EventVisibility eventVisibility, EventDescription eventDescription) : base(id)
     {
-        Status = eventStatus;
-        MaxGuestNumber = eventMaxGuests;
-        Title = eventTitle;
+        status = eventStatus;
+        maxGuestNumber = eventMaxGuests;
+        title = eventTitle;
+        visibility = eventVisibility;
+        description = eventDescription;
     }
 
     public static Result<ViaEvent> Create()
@@ -40,6 +43,8 @@ public class ViaEvent: EntityBase<EventId>
             return ResultHelper.Failure<ViaEvent>(eventTitleFailure.Errors);
 
         var title = ((Success<EventTitle>)eventTitle).Value;
+        
+        return ResultHelpers.Success(new ViaEvent(id,EventStatus.DRAFT, maxGuests, title, EventVisibility.PRIVATE));
 
         return ResultHelper.Success(new ViaEvent(id,EventStatus.DRAFT, maxGuests, title));
     }
