@@ -6,20 +6,20 @@ namespace DCA_ASSIGNMENT.Core.Domain.Aggregates.Events;
 
 public class ViaEvent: EntityBase<EventId>
 {
-    public EventTitle title { get; }
-    public EventDescription description { get; }
-    public EventStatus status { get; }
-    public EventMaxGuests maxGuestNumber { get; }
-    public EventVisibility visibility { get; }
+    internal EventTitle Title;
+    internal EventDescription Description;
+    internal EventStatus Status;
+    internal EventMaxGuests MaxGuestNumber;
+    internal EventVisibility EventVisibility;
 
     
-    private ViaEvent(EventId id, EventStatus eventStatus, EventMaxGuests eventMaxGuests, EventTitle eventTitle, EventVisibility eventVisibility, EventDescription eventDescription) : base(id)
+    private ViaEvent(EventId id, EventTitle eventTitle, EventDescription eventDescription, EventStatus eventStatus, EventMaxGuests eventMaxGuests ,EventVisibility eventVisibility) : base(id)
     {
-        status = eventStatus;
-        maxGuestNumber = eventMaxGuests;
-        title = eventTitle;
-        visibility = eventVisibility;
-        description = eventDescription;
+        Title = eventTitle;
+        Description = eventDescription;
+        Status = eventStatus;
+        MaxGuestNumber = eventMaxGuests;
+        EventVisibility = eventVisibility;
     }
 
     public static Result<ViaEvent> Create()
@@ -44,9 +44,13 @@ public class ViaEvent: EntityBase<EventId>
 
         var title = ((Success<EventTitle>)eventTitle).Value;
         
-        return ResultHelpers.Success(new ViaEvent(id,EventStatus.DRAFT, maxGuests, title, EventVisibility.PRIVATE));
-
-        return ResultHelper.Success(new ViaEvent(id,EventStatus.DRAFT, maxGuests, title));
+        Result<EventDescription> eventDescription = EventDescription.Create("");
+        if (eventDescription is Failure<EventDescription> eventDescriptionFailure)
+            return ResultHelper.Failure<ViaEvent>(eventDescriptionFailure.Errors);
+        
+        var description = ((Success<EventDescription>)eventDescription).Value;
+        
+        return ResultHelper.Success(new ViaEvent(id,title, description, EventStatus.DRAFT, maxGuests,EventVisibility.PRIVATE));
     }
 
     public Result<None> UpdateTitle(EventTitle newTitle)
@@ -57,10 +61,11 @@ public class ViaEvent: EntityBase<EventId>
         if (Status is EventStatus.ACTIVE or EventStatus.COMPLETED)
             return EventErrors.Status.CannotModifyActive;
 
-        Title = newTitle;
 
         if (Status == EventStatus.READY)
             Status = EventStatus.DRAFT;
+        
+        Title = newTitle;
 
         return ResultHelper.Success();
     }
