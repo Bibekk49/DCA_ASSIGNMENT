@@ -9,46 +9,43 @@ public class CreateEventAggregateUnitTests
     [Fact]
     public void GivenEventId_WhenCreateEvent_ThenStatusIsDraft()
     {
-        Result<DCA_ASSIGNMENT.Core.Domain.Aggregates.Events.ViaEvent> result = ViaEvent.Create();
+        Result<ViaEvent> event = ViaEvent.Create().Value;
 
-        var success = Assert.IsType<Success<DCA_ASSIGNMENT.Core.Domain.Aggregates.Events.ViaEvent>>(result);
         var evt = success.Value;
 
         Assert.NotEqual(Guid.Empty, evt.Id.Value);
-        Assert.Equal(EventStatus.DRAFT, evt.status);
-        Assert.Equal(5, evt.maxGuestNumber.Value);
+        Assert.Equal(EventStatus.DRAFT, evt.Status);
+        Assert.Equal(5, evt.MaxGuestNumber.Value);
     }
 
     [Fact]
     public void GivenEventId_WhenCreateEvent_ThenTitleIsWorkingTitle()
     {
-        var result = ViaEvent.Create();
+        Result<ViaEvent> event = ViaEvent.Create(eventId).Value;
 
-        var success = Assert.IsType<Success<ViaEvent>>(result);
         var evt = success.Value;
 
-        Assert.Equal("Working Title", evt.title.Value);
+        Assert.Equal("Working Title", evt.Title.Value);
     }
 
     [Fact]
     public void GivenEventId_WhenCreateEvent_ThenDescriptionIsEmpty()
     {
-        var result = ViaEvent.Create();
+        Result<ViaEvent> @event = ViaEvent.Create(eventId);
 
-        var success = Assert.IsType<Success<ViaEvent>>(result);
+        var success = Assert.IsType<Success<ViaEvent>>(@event);
         var evt = success.Value;
 
-        Assert.Null(evt.description);
+        Assert.Null(evt.Description);
     }
 
     [Fact]
     public void GivenEventId_WhenCreateEvent_ThenVisibilityIsPrivate()
     {
-        var result = ViaEvent.Create();
 
-        var success = Assert.IsType<Success<ViaEvent>>(result);
+        Result<ViaEvent> @event = ViaEvent.Create(eventId);
         var evt = success.Value;
 
-        Assert.Equal(EventVisibility.PRIVATE, evt.visibility);
+        Assert.Equal(EventVisibility.PRIVATE, evt.Visibility);
     }
 }
