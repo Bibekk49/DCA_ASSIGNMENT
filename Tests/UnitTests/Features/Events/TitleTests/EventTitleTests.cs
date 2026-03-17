@@ -4,6 +4,8 @@ using DCA_ASSIGNMENT.Core.Tools.OperationResult;
 
 namespace UnitTests.ViaEvent;
 
+//This might be the tests under event creation but for now it's here!!
+
 public class EventTitleTests
 {
     [Theory]

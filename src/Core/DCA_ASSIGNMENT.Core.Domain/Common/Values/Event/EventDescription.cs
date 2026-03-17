@@ -29,15 +29,7 @@ public sealed class EventDescription : ValueObject
     }
 
     private static Result<None> Validate(string description) =>
-        Combine(
-            ValidateNotEmpty(description),
-            ValidateMaxLength(description)
-        );
-
-    private static Result<None> ValidateNotEmpty(string description) =>
-        string.IsNullOrWhiteSpace(description)
-            ? EventErrors.Description.DescriptionEmpty
-            : Success();
+        ValidateMaxLength(description);
 
     private static Result<None> ValidateMaxLength(string description) =>
         !string.IsNullOrWhiteSpace(description) && description.Length > MaxLength
