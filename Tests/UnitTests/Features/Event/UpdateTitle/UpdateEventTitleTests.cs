@@ -35,7 +35,7 @@ public class UpdateEventTitleTests
     {
         // Arrange
         DomainEvent evt = ((Success<DomainEvent>)DomainEvent.Create()).Value;
-        evt.SetStatusForTesting(EventStatus.READY);
+        evt.Status = EventStatus.READY;
         EventTitle newTitle = ((Success<EventTitle>)EventTitle.Create(titleStr)).Value;
 
         // Act
@@ -99,7 +99,7 @@ public class UpdateEventTitleTests
     {
         // Arrange
         DomainEvent evt = ((Success<DomainEvent>)DomainEvent.Create()).Value;
-        evt.SetStatusForTesting(EventStatus.ACTIVE);
+        evt.Status = EventStatus.ACTIVE;
         EventTitle newTitle = ((Success<EventTitle>)EventTitle.Create("Some New Title")).Value;
 
         // Act

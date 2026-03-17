@@ -88,9 +88,4 @@ public class ViaEvent : EntityBase<EventId>
         EventVisibility = EventVisibility.PUBLIC;
         return ResultHelper.Success();
     }
-
-    internal void SetStatusForTesting(EventStatus status)
-    {
-        Status = status;
-    }
 }

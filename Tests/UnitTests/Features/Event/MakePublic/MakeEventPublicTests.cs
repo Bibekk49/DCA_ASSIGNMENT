@@ -14,7 +14,7 @@ public class MakeEventPublicTests
     {
         // Arrange
         DomainEvent evt = ((Success<DomainEvent>)DomainEvent.Create()).Value;
-        evt.SetStatusForTesting(status);
+        evt.Status = status;
 
         // Act
         Result<None> result = evt.MakePublic();
@@ -30,7 +30,7 @@ public class MakeEventPublicTests
     {
         // Arrange
         DomainEvent evt = ((Success<DomainEvent>)DomainEvent.Create()).Value;
-        evt.SetStatusForTesting(EventStatus.CANCELLED);
+        evt.Status = EventStatus.CANCELLED;
 
         // Act
         Result<None> result = evt.MakePublic();
