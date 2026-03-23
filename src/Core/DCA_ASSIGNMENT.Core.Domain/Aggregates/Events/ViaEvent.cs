@@ -1,63 +1,60 @@
 using DCA_ASSIGNMENT.Core.Domain.Common.Bases;
 using DCA_ASSIGNMENT.Core.Domain.Common.Values.Event;
 using DCA_ASSIGNMENT.Core.Tools.OperationResult;
-using static DCA_ASSIGNMENT.Core.Tools.OperationResult.ResultHelper;
 
 namespace DCA_ASSIGNMENT.Core.Domain.Aggregates.Events;
 
-public class ViaEvent : EntityBase<EventId>
+public class ViaEvent: EntityBase<EventId>
 {
-    public EventTitle Title { get; }
-    public EventDescription Description { get; }
-    public EventStatus Status { get; }
-    public EventMaxGuests MaxGuestNumber { get;}
-    public EventVisibility Visibility { get;}
-    public EventTimes? Times { get;}
+    internal EventTitle Title;
+    internal EventDescription Description;
+    internal EventStatus Status;
+    internal EventMaxGuests MaxGuestNumber;
+    internal EventVisibility EventVisibility;
+    internal EventTimes? Times;
 
-    private ViaEvent(
-        EventId id,
-        EventTitle eventTitle,
-         EventDescription eventDescription,
-        EventStatus eventStatus,
-        EventMaxGuests eventMaxGuests,
-        EventVisibility eventVisibility,
-        EventTimes? eventTimes ) : base(id)
+    internal EventVisibility Visibility;
+
+    
+    private ViaEvent(EventId id, EventTitle eventTitle, EventDescription eventDescription, EventStatus eventStatus, EventMaxGuests eventMaxGuests ,EventVisibility eventVisibility, EventTimes? times) : base(id)
     {
+        Title = eventTitle;
+        Description = eventDescription;
         Status = eventStatus;
         MaxGuestNumber = eventMaxGuests;
-        Title = eventTitle;
-        Visibility = eventVisibility;
-        Description = eventDescription;
-        Times = eventTimes;
+        EventVisibility = eventVisibility;
+        Times = times;
     }
 
     public static Result<ViaEvent> Create()
     {
-        var idResult = EventId.New();
+        Result<EventId> idResult = EventId.New();
 
-        if (idResult is Failure<EventId> idFailure)
-            return Failure<ViaEvent>(idFailure.Errors);
+        if (idResult is Failure<EventId> f)
+            return ResultHelper.Failure<ViaEvent>(f.Errors);
 
         var id = ((Success<EventId>)idResult).Value;
-        return Create(id);
-    }
 
-    public static Result<ViaEvent> Create(EventId eventId)
-    {
-        Result<EventMaxGuests> maxGuest = EventMaxGuests.Create(5);
+        Result<EventMaxGuests> maxGuest =EventMaxGuests.Create(5);
 
         if (maxGuest is Failure<EventMaxGuests> maxGuestFailure)
-            return Failure<ViaEvent>(maxGuestFailure.Errors);
+            return ResultHelper.Failure<ViaEvent>(maxGuestFailure.Errors);
 
         var maxGuests = ((Success<EventMaxGuests>)maxGuest).Value;
 
         Result<EventTitle> eventTitle = EventTitle.Create("Working Title");
         if (eventTitle is Failure<EventTitle> eventTitleFailure)
-            return Failure<ViaEvent>(eventTitleFailure.Errors);
+            return ResultHelper.Failure<ViaEvent>(eventTitleFailure.Errors);
 
         var title = ((Success<EventTitle>)eventTitle).Value;
-
-        return ResultHelpers.Success<ViaEvent>(new ViaEvent(eventId, EventStatus.DRAFT, maxGuests, title, EventVisibility.PRIVATE, null));
+        
+        Result<EventDescription> eventDescription = EventDescription.Create("");
+        if (eventDescription is Failure<EventDescription> eventDescriptionFailure)
+            return ResultHelper.Failure<ViaEvent>(eventDescriptionFailure.Errors);
+        
+        var description = ((Success<EventDescription>)eventDescription).Value;
+        
+        return ResultHelper.Success(new ViaEvent(id,title, description, EventStatus.DRAFT, maxGuests,EventVisibility.PRIVATE, null));
     }
 
     public Result<None> UpdateTitle(EventTitle newTitle)
@@ -68,21 +65,33 @@ public class ViaEvent : EntityBase<EventId>
         if (Status is EventStatus.ACTIVE or EventStatus.COMPLETED)
             return EventErrors.Status.CannotModifyActive;
 
+
+        if (Status == EventStatus.READY)
+            Status = EventStatus.DRAFT;
+        
         Title = newTitle;
+
+        return ResultHelper.Success();
+    }
+
+    public Result<None> UpdateTimes(EventTimes newTimes, DateTime now)
+    {
+       if (Status == EventStatus.CANCELLED)
+            return EventErrors.Status.CannotModifyCancelled;
+
+        if (Status is EventStatus.ACTIVE or EventStatus.COMPLETED)
+            return EventErrors.Status.CannotModifyActive;
+
+        var startDateTime = newTimes.StartDate.ToDateTime(newTimes.StartTime);
+        if (startDateTime <= now)
+            return EventErrors.Times.StartMustBeInFuture;
+
+        Times = newTimes;
 
         if (Status == EventStatus.READY)
             Status = EventStatus.DRAFT;
 
-        return ResultHelpers.Success();
-    }
-
-    public Result<None> UpdateTimes(EventTimes newTimes)
-    {
-        if (Status != EventStatus.DRAFT)
-            return EventErrors.Times.CannotSetWhenNotDraft;
-
-        Times = newTimes;
-        return ResultHelpers.Success();
+        return ResultHelper.Success();
     }
 
     public Result<None> Cancel()
@@ -91,7 +100,7 @@ public class ViaEvent : EntityBase<EventId>
             return EventErrors.Status.CannotModifyCancelled;
 
         Status = EventStatus.CANCELLED;
-        return ResultHelpers.Success();
+        return ResultHelper.Success();
     }
 
 }

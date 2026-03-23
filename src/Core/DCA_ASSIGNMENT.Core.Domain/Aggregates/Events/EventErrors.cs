@@ -48,8 +48,14 @@ public static class EventErrors
 
     public static class Times
     {
+        public static readonly ResultError StartDateMustBeOnOrBeforeEndDate =
+            new("Event.Times.StartDateBeforeEndDate", "Start date cannot be after end date.", "Validation");
+
+        public static readonly ResultError StartTimeMustBeBeforeEndTime =
+            new("Event.Times.StartTimeBeforeEndTime", "When start and end date are the same, start time must be before end time.", "Validation");
+
         public static readonly ResultError StartMustBeBeforeEnd =
-            new("Event.Times.StartBeforeEnd", "Start time must be before end time.", "Validation");
+            new("Event.Times.StartBeforeEnd", "Start date/time range is invalid.", "Validation");
 
         public static readonly ResultError DurationTooShort =
             new("Event.Times.DurationTooShort", "Event duration must be at least 1 hour.", "Validation");
@@ -63,8 +69,8 @@ public static class EventErrors
         public static readonly ResultError EndTooLate =
             new("Event.Times.EndTooLate", "If ending after midnight, end time must be 01:00 or earlier.", "Validation");
 
-        public static readonly ResultError CannotSetWhenNotDraft =
-            new("Event.Times.NotDraft", "Event times can only be updated when event status is Draft.", "BusinessRule");
+       public static readonly ResultError StartMustBeInFuture =
+            new("Event.Times.StartMustBeInFuture", "Event start date/time must be in the future.", "BusinessRule");
     }
 }
 
