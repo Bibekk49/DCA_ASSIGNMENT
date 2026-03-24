@@ -1,6 +1,6 @@
 namespace DCA_ASSIGNMENT.Core.Tools.OperationResult;
 
-public static class ResultHelpers
+public static class ResultHelper
 {
 
     public static Result<T> Success<T>(T value)

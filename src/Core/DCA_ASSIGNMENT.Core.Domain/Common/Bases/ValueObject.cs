@@ -12,6 +12,8 @@ public abstract class ValueObject : IEquatable<ValueObject>
             .SequenceEqual(GetEqualityComponents());
     }
 
+    public override bool Equals(object? obj) => Equals(obj as ValueObject);
+
     public override int GetHashCode() =>
         GetEqualityComponents()
             .Aggregate(default(int), HashCode.Combine);
