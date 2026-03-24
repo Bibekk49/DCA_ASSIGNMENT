@@ -1,7 +1,7 @@
 using DCA_ASSIGNMENT.Core.Domain.Aggregates.Events;
 using DCA_ASSIGNMENT.Core.Domain.Common.Bases;
 using DCA_ASSIGNMENT.Core.Tools.OperationResult;
-using static DCA_ASSIGNMENT.Core.Tools.OperationResult.ResultHelpers;
+using static DCA_ASSIGNMENT.Core.Tools.OperationResult.ResultHelper;
 
 namespace DCA_ASSIGNMENT.Core.Domain.Common.Values.Event;
 
@@ -32,9 +32,8 @@ public sealed class EventDescription : ValueObject
 
     private static Result<None> Validate(string description) =>
 
-        Combine(
-            ValidateMaxLength(description)
-        );
+       
+            ValidateMaxLength(description);
 
     private static Result<None> ValidateMaxLength(string description) =>
         description.Length > MaxLength

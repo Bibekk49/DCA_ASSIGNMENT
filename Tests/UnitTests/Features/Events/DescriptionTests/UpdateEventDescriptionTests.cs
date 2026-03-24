@@ -22,8 +22,8 @@ public class UpdateEventDescriptionTests
 
         // Assert
         Assert.IsType<Success<None>>(result);
-        Assert.Equal("Updated description", viaEvent.description.Value);
-        Assert.Equal(EventStatus.DRAFT, viaEvent.status);
+        Assert.Equal("Updated description", viaEvent.Description.Value);
+        Assert.Equal(EventStatus.DRAFT, viaEvent.Status);
     }
 
     [Fact]
@@ -43,8 +43,8 @@ public class UpdateEventDescriptionTests
 
         // Assert
         Assert.IsType<Success<None>>(result);
-        Assert.Equal("Ready event updated", viaEvent.description.Value);
-        Assert.Equal(EventStatus.DRAFT, viaEvent.status);
+        Assert.Equal("Ready event updated", viaEvent.Description.Value);
+        Assert.Equal(EventStatus.DRAFT, viaEvent.Status);
     }
 
     [Fact]
@@ -89,7 +89,6 @@ public class UpdateEventDescriptionTests
 
     private static void SetStatus(EventAggregate viaEvent, EventStatus status)
     {
-        var property = typeof(EventAggregate).GetProperty(nameof(EventAggregate.status));
-        property!.SetValue(viaEvent, status);
+        viaEvent.Status = status;
     }
 }
