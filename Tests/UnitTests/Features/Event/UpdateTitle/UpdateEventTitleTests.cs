@@ -3,7 +3,7 @@ using DCA_ASSIGNMENT.Core.Domain.Common.Values.Event;
 using DCA_ASSIGNMENT.Core.Tools.OperationResult;
 using DomainEvent = DCA_ASSIGNMENT.Core.Domain.Aggregates.Events.ViaEvent;
 
-namespace UnitTests.ViaEvent;
+namespace UnitTests.Features.Event.UpdateTitle;
 
 public class UpdateEventTitleTests
 {

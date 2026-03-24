@@ -70,6 +70,21 @@ public class ViaEvent : EntityBase<EventId>
 
         return ResultHelper.Success();
     }
+    public Result<None> UpdateDescription(EventDescription newDescription)
+    {
+        if (Status == EventStatus.ACTIVE)
+            return ResultHelper.Failure<None>(EventErrors.Status.CannotModifyActive);
+
+        if (Status == EventStatus.CANCELLED)
+            return ResultHelper.Failure<None>(EventErrors.Status.CannotModifyCancelled);
+
+        Description = newDescription;
+
+        if (Status == EventStatus.READY)
+            Status = EventStatus.DRAFT;
+
+        return ResultHelper.Success();
+    }
 
     public Result<None> Cancel()
     {
