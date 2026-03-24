@@ -4,7 +4,7 @@ using DCA_ASSIGNMENT.Core.Tools.OperationResult;
 
 namespace DCA_ASSIGNMENT.Core.Domain.Aggregates.Events;
 
-public class ViaEvent: EntityBase<EventId>
+public class ViaEvent : EntityBase<EventId>
 {
     internal EventTitle Title;
     internal EventDescription Description;
@@ -12,8 +12,6 @@ public class ViaEvent: EntityBase<EventId>
     internal EventMaxGuests MaxGuestNumber;
     internal EventVisibility EventVisibility;
     internal EventTimes? Times;
-
-    internal EventVisibility Visibility;
 
     
     private ViaEvent(EventId id, EventTitle eventTitle, EventDescription eventDescription, EventStatus eventStatus, EventMaxGuests eventMaxGuests ,EventVisibility eventVisibility, EventTimes? times) : base(id)
@@ -35,7 +33,7 @@ public class ViaEvent: EntityBase<EventId>
 
         var id = ((Success<EventId>)idResult).Value;
 
-        Result<EventMaxGuests> maxGuest =EventMaxGuests.Create(5);
+        Result<EventMaxGuests> maxGuest = EventMaxGuests.Create(5);
 
         if (maxGuest is Failure<EventMaxGuests> maxGuestFailure)
             return ResultHelper.Failure<ViaEvent>(maxGuestFailure.Errors);
@@ -68,8 +66,20 @@ public class ViaEvent: EntityBase<EventId>
 
         if (Status == EventStatus.READY)
             Status = EventStatus.DRAFT;
-        
+
         Title = newTitle;
+        return ResultHelper.Success();
+    }
+    
+    public Result<None> UpdateDescription(EventDescription newDescription)
+    {
+        if (Status == EventStatus.ACTIVE)
+            return ResultHelper.Failure<None>(EventErrors.Status.CannotModifyActive);
+
+        if (Status == EventStatus.CANCELLED)
+            return ResultHelper.Failure<None>(EventErrors.Status.CannotModifyCancelled);
+
+        Description = newDescription;
 
         return ResultHelper.Success();
     }
@@ -88,8 +98,6 @@ public class ViaEvent: EntityBase<EventId>
 
         Times = newTimes;
 
-        if (Status == EventStatus.READY)
-            Status = EventStatus.DRAFT;
 
         return ResultHelper.Success();
     }
@@ -103,4 +111,12 @@ public class ViaEvent: EntityBase<EventId>
         return ResultHelper.Success();
     }
 
+    public Result<None> MakePublic()
+    {
+        if (Status == EventStatus.CANCELLED)
+            return EventErrors.Status.CannotModifyCancelled;
+
+        EventVisibility = EventVisibility.PUBLIC;
+        return ResultHelper.Success();
+    }
 }

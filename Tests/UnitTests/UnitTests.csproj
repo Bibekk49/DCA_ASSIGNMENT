@@ -24,7 +24,7 @@
     </ItemGroup>
 
     <ItemGroup>
-      <Folder Include="Features\Events\CreateEvent\" />
+      <Folder Include="Features\Event\CreateEvent\" />
     </ItemGroup>
 
     <ItemGroup>

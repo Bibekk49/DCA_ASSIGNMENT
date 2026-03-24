@@ -7,7 +7,7 @@ namespace DCA_ASSIGNMENT.Core.Domain.Common.Values.Event;
 
 public sealed class EventDescription : ValueObject
 {
-    private static readonly int MaxLength = 1000;
+    private static readonly int MaxLength = 250;
 
     public string Value { get; }
 
@@ -18,8 +18,10 @@ public sealed class EventDescription : ValueObject
         yield return Value;
     }
 
-    public static Result<EventDescription> Create(string description)
+    public static Result<EventDescription> Create(string? description)
     {
+        description ??= string.Empty;
+
         var validation = Validate(description);
 
         if (validation is Failure<None> failure)
@@ -30,18 +32,11 @@ public sealed class EventDescription : ValueObject
 
     private static Result<None> Validate(string description) =>
         Combine(
-            ValidateNotEmpty(description),
             ValidateMaxLength(description)
         );
 
-    private static Result<None> ValidateNotEmpty(string description) =>
-        string.IsNullOrWhiteSpace(description)
-            ? EventErrors.Description.DescriptionEmpty
-            : Success();
-
     private static Result<None> ValidateMaxLength(string description) =>
-        !string.IsNullOrWhiteSpace(description) && description.Length > MaxLength
+        description.Length > MaxLength
             ? EventErrors.Description.DescriptionTooLong
             : Success();
 }
-
