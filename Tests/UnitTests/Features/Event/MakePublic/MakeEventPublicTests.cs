@@ -2,7 +2,7 @@ using DCA_ASSIGNMENT.Core.Domain.Aggregates.Events;
 using DCA_ASSIGNMENT.Core.Tools.OperationResult;
 using DomainEvent = DCA_ASSIGNMENT.Core.Domain.Aggregates.Events.ViaEvent;
 
-namespace UnitTests.ViaEvent;
+namespace UnitTests.Features.Event.MakePublic;
 
 public class MakeEventPublicTests
 {
