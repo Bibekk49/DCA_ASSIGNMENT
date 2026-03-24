@@ -31,9 +31,9 @@ public sealed class EventDescription : ValueObject
     }
 
     private static Result<None> Validate(string description) =>
-        Combine(
-            ValidateMaxLength(description)
-        );
+
+        ValidateMaxLength(description);
+
 
     private static Result<None> ValidateMaxLength(string description) =>
         description.Length > MaxLength
