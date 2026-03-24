@@ -1,10 +1,9 @@
 using DCA_ASSIGNMENT.Core.Domain.Aggregates.Events;
-using DCA_ASSIGNMENT.Core.Domain.Common.Bases;
 using DCA_ASSIGNMENT.Core.Domain.Common.Values.Event;
 using DCA_ASSIGNMENT.Core.Tools.OperationResult;
 using EventAggregate = DCA_ASSIGNMENT.Core.Domain.Aggregates.Events.ViaEvent;
 
-namespace UnitTests.Features.Events.UpdateTimes;
+namespace UnitTests.Features.Event.UpdateTimes;
 
 public class UpdateEventTimesSuccessScenariosTests
 {
@@ -87,7 +86,7 @@ public class UpdateEventTimesSuccessScenariosTests
         TimeOnly endTime)
     {
         var evt = CreateEvent();
-        evt.SetStatusForTesting(EventStatus.READY);
+        evt.Status = EventStatus.READY;
 
         var times = CreateTimes(startDate, startTime, endDate, endTime);
 

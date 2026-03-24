@@ -86,11 +86,14 @@ public class ViaEvent : EntityBase<EventId>
 
     public Result<None> UpdateTimes(EventTimes newTimes, DateTime now)
     {
-       if (Status == EventStatus.CANCELLED)
+        if (Status == EventStatus.CANCELLED)
             return EventErrors.Status.CannotModifyCancelled;
 
         if (Status is EventStatus.ACTIVE or EventStatus.COMPLETED)
             return EventErrors.Status.CannotModifyActive;
+
+        if (Status == EventStatus.READY)
+            Status = EventStatus.DRAFT;
 
         var startDateTime = newTimes.StartDate.ToDateTime(newTimes.StartTime);
         if (startDateTime <= now)

@@ -1,16 +1,15 @@
 using DCA_ASSIGNMENT.Core.Domain.Aggregates.Events;
-using DCA_ASSIGNMENT.Core.Domain.Common.Bases;
 using DCA_ASSIGNMENT.Core.Domain.Common.Values.Event;
 using DCA_ASSIGNMENT.Core.Tools.OperationResult;
 using EventAggregate = DCA_ASSIGNMENT.Core.Domain.Aggregates.Events.ViaEvent;
 
-namespace UnitTests.Features.Events.UpdateTimes;
+namespace UnitTests.Features.Event.UpdateTimes;
 
 public class UpdateEventTimesFailureScenariosTests
 {
     private static readonly DateTime FixedNow = new(2027, 1, 1, 10, 0, 0);
 
-    public static IEnumerable<object[]> F1_StartDateAfterEndDate =>
+    public static IEnumerable<object[]> F1StartDateAfterEndDate =>
         new[]
         {
             new object[] { new DateOnly(2027, 8, 26), new TimeOnly(19, 0), new DateOnly(2027, 8, 25), new TimeOnly(1, 0) },
@@ -19,7 +18,7 @@ public class UpdateEventTimesFailureScenariosTests
             new object[] { new DateOnly(2027, 8, 1),  new TimeOnly(8, 0),  new DateOnly(2027, 7, 31), new TimeOnly(12, 15) }
         };
 
-    public static IEnumerable<object[]> F2_SameDayStartAfterEnd =>
+    public static IEnumerable<object[]> F2SameDayStartAfterEnd =>
         new[]
         {
             new object[] { new DateOnly(2027, 8, 26), new TimeOnly(19, 0), new DateOnly(2027, 8, 26), new TimeOnly(14, 0) },
@@ -29,7 +28,7 @@ public class UpdateEventTimesFailureScenariosTests
             new object[] { new DateOnly(2027, 8, 26), new TimeOnly(8, 0),  new DateOnly(2027, 8, 26), new TimeOnly(0, 30) }
         };
 
-    public static IEnumerable<object[]> F3_SameDayDurationLessThanOneHour =>
+    public static IEnumerable<object[]> F3SameDayDurationLessThanOneHour =>
         new[]
         {
             new object[] { new DateOnly(2027, 8, 26), new TimeOnly(14, 0), new DateOnly(2027, 8, 26), new TimeOnly(14, 50) },
@@ -37,7 +36,7 @@ public class UpdateEventTimesFailureScenariosTests
             new object[] { new DateOnly(2027, 8, 26), new TimeOnly(12, 0), new DateOnly(2027, 8, 26), new TimeOnly(12, 30) }
         };
 
-    public static IEnumerable<object[]> F4_OvernightDurationLessThanOneHour =>
+    public static IEnumerable<object[]> F4OvernightDurationLessThanOneHour =>
         new[]
         {
             new object[] { new DateOnly(2027, 8, 25), new TimeOnly(23, 30), new DateOnly(2027, 8, 26), new TimeOnly(0, 15) },
@@ -45,7 +44,7 @@ public class UpdateEventTimesFailureScenariosTests
             new object[] { new DateOnly(2027, 8, 30), new TimeOnly(23, 59), new DateOnly(2027, 8, 31), new TimeOnly(0, 1) }
         };
 
-    public static IEnumerable<object[]> F5_StartBefore08 =>
+    public static IEnumerable<object[]> F5StartBefore08 =>
         new[]
         {
             new object[] { new DateOnly(2027, 8, 25), new TimeOnly(7, 50), new DateOnly(2027, 8, 25), new TimeOnly(14, 0) },
@@ -53,14 +52,14 @@ public class UpdateEventTimesFailureScenariosTests
             new object[] { new DateOnly(2027, 8, 25), new TimeOnly(1, 1),  new DateOnly(2027, 8, 25), new TimeOnly(8, 30) }
         };
 
-    public static IEnumerable<object[]> F6_NextDayEndAfter01 =>
+    public static IEnumerable<object[]> F6NextDayEndAfter01 =>
         new[]
         {
             new object[] { new DateOnly(2027, 8, 24), new TimeOnly(23, 50), new DateOnly(2027, 8, 25), new TimeOnly(1, 1) },
             new object[] { new DateOnly(2027, 8, 30), new TimeOnly(23, 0),  new DateOnly(2027, 8, 31), new TimeOnly(2, 30) }
         };
 
-    public static IEnumerable<object[]> F9_DurationMoreThanTenHours =>
+    public static IEnumerable<object[]> F9DurationMoreThanTenHours =>
         new[]
         {
             new object[] { new DateOnly(2027, 8, 30), new TimeOnly(8, 0),  new DateOnly(2027, 8, 30), new TimeOnly(18, 1) },
@@ -68,7 +67,7 @@ public class UpdateEventTimesFailureScenariosTests
             new object[] { new DateOnly(2027, 8, 30), new TimeOnly(14, 0),  new DateOnly(2027, 8, 31), new TimeOnly(0, 1) }
         };
 
-    public static IEnumerable<object[]> F11_InvalidClosedHoursCases =>
+    public static IEnumerable<object[]> F11InvalidClosedHoursCases =>
         new[]
         {
             // Fails with StartTooEarly
@@ -98,7 +97,7 @@ public class UpdateEventTimesFailureScenariosTests
         };
 
     [Theory]
-    [MemberData(nameof(F1_StartDateAfterEndDate))]
+    [MemberData(nameof(F1StartDateAfterEndDate))]
     public void F1_GivenStartDateAfterEndDate_WhenCreatingEventTimes_ThenFailureWithCorrectMessage(
         DateOnly startDate,
         TimeOnly startTime,
@@ -113,7 +112,7 @@ public class UpdateEventTimesFailureScenariosTests
     }
 
     [Theory]
-    [MemberData(nameof(F2_SameDayStartAfterEnd))]
+    [MemberData(nameof(F2SameDayStartAfterEnd))]
     public void F2_GivenSameDateAndStartTimeAfterEndTime_WhenCreatingEventTimes_ThenFailureWithCorrectMessage(
         DateOnly startDate,
         TimeOnly startTime,
@@ -128,7 +127,7 @@ public class UpdateEventTimesFailureScenariosTests
     }
 
     [Theory]
-    [MemberData(nameof(F3_SameDayDurationLessThanOneHour))]
+    [MemberData(nameof(F3SameDayDurationLessThanOneHour))]
     public void F3_GivenSameDateAndDurationLessThanOneHour_WhenCreatingEventTimes_ThenFailureWithCorrectMessage(
         DateOnly startDate,
         TimeOnly startTime,
@@ -143,7 +142,7 @@ public class UpdateEventTimesFailureScenariosTests
     }
 
     [Theory]
-    [MemberData(nameof(F4_OvernightDurationLessThanOneHour))]
+    [MemberData(nameof(F4OvernightDurationLessThanOneHour))]
     public void F4_GivenOvernightDurationLessThanOneHour_WhenCreatingEventTimes_ThenFailureWithCorrectMessage(
         DateOnly startDate,
         TimeOnly startTime,
@@ -158,7 +157,7 @@ public class UpdateEventTimesFailureScenariosTests
     }
 
     [Theory]
-    [MemberData(nameof(F5_StartBefore08))]
+    [MemberData(nameof(F5StartBefore08))]
     public void F5_GivenStartTimeBefore08_WhenCreatingEventTimes_ThenFailureWithCorrectMessage(
         DateOnly startDate,
         TimeOnly startTime,
@@ -173,7 +172,7 @@ public class UpdateEventTimesFailureScenariosTests
     }
 
     [Theory]
-    [MemberData(nameof(F6_NextDayEndAfter01))]
+    [MemberData(nameof(F6NextDayEndAfter01))]
     public void F6_GivenNextDayEndTimeAfter01_WhenCreatingEventTimes_ThenFailureWithCorrectMessage(
         DateOnly startDate,
         TimeOnly startTime,
@@ -191,7 +190,7 @@ public class UpdateEventTimesFailureScenariosTests
     public void F7_GivenActiveEvent_WhenUpdatingTimes_ThenFailureWithCorrectMessage()
     {
         var evt = CreateEvent();
-        evt.SetStatusForTesting(EventStatus.ACTIVE);
+        evt.Status = EventStatus.ACTIVE;
 
         var timesResult = EventTimes.Create(
             new DateOnly(2027, 12, 24),
@@ -212,7 +211,7 @@ public class UpdateEventTimesFailureScenariosTests
     public void F8_GivenCancelledEvent_WhenUpdatingTimes_ThenFailureWithCorrectMessage()
     {
         var evt = CreateEvent();
-        evt.SetStatusForTesting(EventStatus.CANCELLED);
+        evt.Cancel();
 
         var timesResult = EventTimes.Create(
             new DateOnly(2027, 12, 24),
@@ -230,7 +229,7 @@ public class UpdateEventTimesFailureScenariosTests
     }
 
     [Theory]
-    [MemberData(nameof(F9_DurationMoreThanTenHours))]
+    [MemberData(nameof(F9DurationMoreThanTenHours))]
     public void F9_GivenDurationMoreThanTenHours_WhenCreatingEventTimes_ThenFailureWithCorrectMessage(
         DateOnly startDate,
         TimeOnly startTime,
@@ -265,7 +264,7 @@ public class UpdateEventTimesFailureScenariosTests
     }
 
     [Theory]
-    [MemberData(nameof(F11_InvalidClosedHoursCases))]
+    [MemberData(nameof(F11InvalidClosedHoursCases))]
     public void F11_GivenTimesThatSpanClosedHours_WhenCreatingEventTimes_ThenFailureWithCorrectMessage(
         DateOnly startDate,
         TimeOnly startTime,
