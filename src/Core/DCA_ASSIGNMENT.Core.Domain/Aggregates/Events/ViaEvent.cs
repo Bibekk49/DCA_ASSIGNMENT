@@ -79,8 +79,11 @@ public class ViaEvent : EntityBase<EventId>
         if (Status == EventStatus.CANCELLED)
             return ResultHelper.Failure<None>(EventErrors.Status.CannotModifyCancelled);
 
+        if (Status == EventStatus.READY)
+            Status = EventStatus.DRAFT;
+ 
         Description = newDescription;
-
+ 
         return ResultHelper.Success();
     }
 
