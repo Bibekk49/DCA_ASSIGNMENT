@@ -11,15 +11,17 @@ public class ViaEvent : EntityBase<EventId>
     internal EventStatus Status;
     internal EventMaxGuests MaxGuestNumber;
     internal EventVisibility EventVisibility;
+    internal EventTimes? Times;
 
-    private ViaEvent(EventId id, EventTitle eventTitle, EventDescription eventDescription, EventStatus eventStatus,
-        EventMaxGuests eventMaxGuests, EventVisibility eventVisibility) : base(id)
+    
+    private ViaEvent(EventId id, EventTitle eventTitle, EventDescription eventDescription, EventStatus eventStatus, EventMaxGuests eventMaxGuests ,EventVisibility eventVisibility, EventTimes? times) : base(id)
     {
         Title = eventTitle;
         Description = eventDescription;
         Status = eventStatus;
         MaxGuestNumber = eventMaxGuests;
         EventVisibility = eventVisibility;
+        Times = times;
     }
 
     public static Result<ViaEvent> Create()
@@ -43,15 +45,14 @@ public class ViaEvent : EntityBase<EventId>
             return ResultHelper.Failure<ViaEvent>(eventTitleFailure.Errors);
 
         var title = ((Success<EventTitle>)eventTitle).Value;
-
+        
         Result<EventDescription> eventDescription = EventDescription.Create("");
         if (eventDescription is Failure<EventDescription> eventDescriptionFailure)
             return ResultHelper.Failure<ViaEvent>(eventDescriptionFailure.Errors);
-
+        
         var description = ((Success<EventDescription>)eventDescription).Value;
-
-        return ResultHelper.Success(new ViaEvent(id, title, description, EventStatus.DRAFT, maxGuests,
-            EventVisibility.PRIVATE));
+        
+        return ResultHelper.Success(new ViaEvent(id,title, description, EventStatus.DRAFT, maxGuests,EventVisibility.PRIVATE, null));
     }
 
     public Result<None> UpdateTitle(EventTitle newTitle)
@@ -67,9 +68,9 @@ public class ViaEvent : EntityBase<EventId>
             Status = EventStatus.DRAFT;
 
         Title = newTitle;
-
         return ResultHelper.Success();
     }
+    
     public Result<None> UpdateDescription(EventDescription newDescription)
     {
         if (Status == EventStatus.ACTIVE)
@@ -80,8 +81,26 @@ public class ViaEvent : EntityBase<EventId>
 
         Description = newDescription;
 
+        return ResultHelper.Success();
+    }
+
+    public Result<None> UpdateTimes(EventTimes newTimes, DateTime now)
+    {
+        if (Status == EventStatus.CANCELLED)
+            return EventErrors.Status.CannotModifyCancelled;
+
+        if (Status is EventStatus.ACTIVE or EventStatus.COMPLETED)
+            return EventErrors.Status.CannotModifyActive;
+
         if (Status == EventStatus.READY)
             Status = EventStatus.DRAFT;
+
+        var startDateTime = newTimes.StartDate.ToDateTime(newTimes.StartTime);
+        if (startDateTime <= now)
+            return EventErrors.Times.StartMustBeInFuture;
+
+        Times = newTimes;
+
 
         return ResultHelper.Success();
     }
