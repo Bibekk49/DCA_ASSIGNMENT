@@ -5,5 +5,5 @@ namespace ViaEventAssociation.Core.Application.CommandDispaching.Commands;
 
 public interface ICommandHandler<ICommand>
 {
-    Task<Result> Handle(ICommand command);
+    Task<Result> HandleAsync(ICommand command);
 }
