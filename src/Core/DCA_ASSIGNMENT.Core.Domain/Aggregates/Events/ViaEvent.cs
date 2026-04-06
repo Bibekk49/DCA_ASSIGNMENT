@@ -125,4 +125,20 @@ public class ViaEvent : EntityBase<EventId>
         EventVisibility = EventVisibility.PUBLIC;
         return ResultHelper.Success();
     }
+
+    public Result<None> MakePrivate()
+    {
+        if (Status == EventStatus.CANCELLED)
+            return EventErrors.Status.CannotModifyCancelled;
+
+        if (Status == EventStatus.ACTIVE)
+            return EventErrors.Status.CannotModifyActive;
+
+        // Only revert to DRAFT if the visibility is actually changing (public → private)
+        if (EventVisibility == EventVisibility.PUBLIC && Status == EventStatus.READY)
+            Status = EventStatus.DRAFT;
+
+        EventVisibility = EventVisibility.PRIVATE;
+        return ResultHelper.Success();
+    }
 }
