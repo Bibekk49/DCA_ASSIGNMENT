@@ -21,15 +21,11 @@
     <ItemGroup>
       <ProjectReference Include="..\..\src\Core\DCA_ASSIGNMENT.Core.Domain\DCA_ASSIGNMENT.Core.Domain.csproj" />
       <ProjectReference Include="..\..\src\Core\Tools\DCA_ASSIGNMENT.Core.Tools.OperationResult\DCA_ASSIGNMENT.Core.Tools.OperationResult.csproj" />
+      <ProjectReference Include="..\..\src\Core\ViaEventAssociation.Core.Application\ViaEventAssociation.Core.Application.csproj" />
     </ItemGroup>
 
     <ItemGroup>
       <Folder Include="Features\Event\CreateEvent\" />
-    </ItemGroup>
-
-    <ItemGroup>
-      <ProjectReference Include="..\..\src\Core\DCA_ASSIGNMENT.Core.Domain\DCA_ASSIGNMENT.Core.Domain.csproj" />
-      <ProjectReference Include="..\..\src\Core\Tools\DCA_ASSIGNMENT.Core.Tools.OperationResult\DCA_ASSIGNMENT.Core.Tools.OperationResult.csproj" />
     </ItemGroup>
 
 </Project>

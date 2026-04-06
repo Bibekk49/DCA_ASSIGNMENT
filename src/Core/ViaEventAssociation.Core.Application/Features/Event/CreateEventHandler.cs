@@ -6,7 +6,7 @@ namespace ViaEventAssociation.Core.Application.Features.Event;
 
 public class CreateEventHandler: ICommandHandler<CreateEventCommand>
 {
-    public Task<Result> Handle(CreateEventCommand command)
+    public Task<Result> HandleAsync(CreateEventCommand command)
     {
         throw new NotImplementedException();
     }
