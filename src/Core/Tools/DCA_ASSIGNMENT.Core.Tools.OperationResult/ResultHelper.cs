@@ -47,4 +47,23 @@ public static class ResultHelper
 
         return new Success<None>(new None());
     }
+    
+    
+    public class ResultCombiner<T>
+    {
+        private readonly List<ResultError> _errors;
+
+        internal ResultCombiner(List<ResultError> errors) => _errors = errors;
+
+        public Result<T> WithPayloadIfSuccess(Func<T> factory)
+            => _errors.Count > 0
+                ? new Failure<T>(_errors)
+                : new Success<T>(factory());
+    }
+
+    public static ResultCombiner<T> CombineResultsInto<T>(params Result[] results)
+    {
+        var errors = results.SelectMany(r => r.GetErrors()).ToList();
+        return new ResultCombiner<T>(errors);
+    }
 }
