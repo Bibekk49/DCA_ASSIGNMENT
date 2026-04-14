@@ -10,44 +10,20 @@ public class UpdateTimesCommand : ICommand
     public EventTimes Times { get; }
 
     private UpdateTimesCommand(EventId eventId, EventTimes times)
-    {
-        EventId = eventId;
-        Times = times;
-    }
+        => (EventId, Times) = (eventId, times);
 
     public static Result<UpdateTimesCommand> Create(
-        string eventIdStr,
+        string id,
         DateOnly startDate,
         TimeOnly startTime,
         DateOnly endDate,
         TimeOnly endTime)
     {
-        var errors = new List<ResultError>();
-
-        EventId? eventId = null;
-        if (!Guid.TryParse(eventIdStr, out var guid) || guid == Guid.Empty)
-        {
-            errors.Add(EventErrors.Id.IdEmpty);
-        }
-        else
-        {
-            var idResult = EventId.Create(guid);
-            if (idResult is Failure<EventId> idFail)
-                errors.AddRange(idFail.Errors);
-            else
-                eventId = ((Success<EventId>)idResult).Value;
-        }
-
-        EventTimes? times = null;
+        var idResult = EventId.FromString(id);
         var timesResult = EventTimes.Create(startDate, startTime, endDate, endTime);
-        if (timesResult is Failure<EventTimes> timesFail)
-            errors.AddRange(timesFail.Errors);
-        else
-            times = ((Success<EventTimes>)timesResult).Value;
 
-        if (errors.Count > 0)
-            return ResultHelper.Failure<UpdateTimesCommand>(errors);
-
-        return ResultHelper.Success(new UpdateTimesCommand(eventId!, times!));
+        return ResultHelper
+            .CombineResultsInto<UpdateTimesCommand>(idResult, timesResult)
+            .WithPayloadIfSuccess(() => new UpdateTimesCommand(idResult.Payload!, timesResult.Payload!));
     }
 }
