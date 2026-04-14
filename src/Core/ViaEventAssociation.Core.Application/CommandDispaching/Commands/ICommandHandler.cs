@@ -3,7 +3,7 @@ using ViaEventAssociation.Core.Application.CommandDispaching.Commands.Event;
 
 namespace ViaEventAssociation.Core.Application.CommandDispaching.Commands;
 
-public interface ICommandHandler<ICommand>
+internal interface ICommandHandler<ICommand>
 {
-    Task<Result> HandleAsync(ICommand command);
+   Task<Result> HandleAsync(ICommand command);
 }
