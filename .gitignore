@@ -43,3 +43,5 @@ Icon
 *.temp
 dist/
 node_modules/
+
+/Context
