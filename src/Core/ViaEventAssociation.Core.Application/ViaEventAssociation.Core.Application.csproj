@@ -1,0 +1,19 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net10.0</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\DCA_ASSIGNMENT.Core.Domain\DCA_ASSIGNMENT.Core.Domain.csproj" />
+      <ProjectReference Include="..\Tools\DCA_ASSIGNMENT.Core.Tools.OperationResult\DCA_ASSIGNMENT.Core.Tools.OperationResult.csproj" />
+    </ItemGroup>
+    <ItemGroup>
+      <AssemblyAttribute Include="System.Runtime.CompilerServices.InternalsVisibleTo">
+        <_Parameter1>UnitTests</_Parameter1>
+      </AssemblyAttribute>
+    </ItemGroup>
+
+</Project>

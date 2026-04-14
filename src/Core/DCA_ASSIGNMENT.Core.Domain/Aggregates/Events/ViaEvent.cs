@@ -24,14 +24,17 @@ public class ViaEvent : EntityBase<EventId>
         Times = times;
     }
 
-    public static Result<ViaEvent> Create()
+    public static Result<ViaEvent> Create() => Create(null);
+
+    public static Result<ViaEvent> Create(EventId? id)
     {
-        Result<EventId> idResult = EventId.New();
-
-        if (idResult is Failure<EventId> f)
-            return ResultHelper.Failure<ViaEvent>(f.Errors);
-
-        var id = ((Success<EventId>)idResult).Value;
+        if (id is null)
+        {
+            Result<EventId> idResult = EventId.New();
+            if (idResult is Failure<EventId> f)
+                return ResultHelper.Failure<ViaEvent>(f.Errors);
+            id = ((Success<EventId>)idResult).Value;
+        }
 
         Result<EventMaxGuests> maxGuest = EventMaxGuests.Create(5);
 
@@ -123,6 +126,22 @@ public class ViaEvent : EntityBase<EventId>
             return EventErrors.Status.CannotModifyCancelled;
 
         EventVisibility = EventVisibility.PUBLIC;
+        return ResultHelper.Success();
+    }
+
+    public Result<None> MakePrivate()
+    {
+        if (Status == EventStatus.CANCELLED)
+            return EventErrors.Status.CannotModifyCancelled;
+
+        if (Status == EventStatus.ACTIVE)
+            return EventErrors.Status.CannotModifyActive;
+
+        // Only revert to DRAFT if the visibility is actually changing (public → private)
+        if (EventVisibility == EventVisibility.PUBLIC && Status == EventStatus.READY)
+            Status = EventStatus.DRAFT;
+
+        EventVisibility = EventVisibility.PRIVATE;
         return ResultHelper.Success();
     }
 }

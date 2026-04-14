@@ -37,6 +37,12 @@ public static class EventErrors
             new("EventMaxGuests.TooLow", "Maximum guests must be at least 1.", "Validation");
     }
 
+    public static class Event
+    {
+        public static readonly ResultError NotFound =
+            new("Event.NotFound", "Event with the given ID was not found.", "NotFound");
+    }
+
     public static class Status
     {
         public static readonly ResultError CannotModifyActive =
