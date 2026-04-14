@@ -6,31 +6,25 @@ using ViaEventAssociation.Core.Application.CommandDispaching.Commands.Event;
 
 namespace ViaEventAssociation.Core.Application.Features.Event;
 
-public class CreateEventHandler: ICommandHandler<CreateEventCommand>
+internal class CreateEventHandler : ICommandHandler<CreateEventCommand>
 {
     private readonly IEventRepository _repo;
     private readonly IUnitOfWork _uow;
 
-    public CreateEventHandler(IEventRepository repo, IUnitOfWork uow)
+    internal CreateEventHandler(IEventRepository repo, IUnitOfWork uow)
     {
         _repo = repo;
         _uow = uow;
     }
 
-    public Task<Result> HandleAsync(CreateEventCommand command)
+    public async Task<Result> HandleAsync(CreateEventCommand command)
     {
-        var eventResult = ViaEvent.Create(command.Title, command.Description, command.MaxGuests);
-
+        var eventResult = ViaEvent.Create(command.Id);
         if (eventResult is Failure<ViaEvent> failure)
-            return Task.FromResult<Result>(ResultHelper.Failure<None>(failure.Errors));
+            return ResultHelper.Failure<None>(failure.Errors);
 
         var evt = ((Success<ViaEvent>)eventResult).Value;
 
-        return HandleCreateAsync(evt);
-    }
-
-    private async Task<Result> HandleCreateAsync(ViaEvent evt)
-    {
         await _repo.AddAsync(evt);
         await _uow.SaveChangesAsync();
 
