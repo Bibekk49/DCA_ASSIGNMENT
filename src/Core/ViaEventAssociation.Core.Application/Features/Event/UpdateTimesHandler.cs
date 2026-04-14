@@ -6,28 +6,28 @@ using ViaEventAssociation.Core.Application.CommandDispaching.Commands.Event;
 
 namespace ViaEventAssociation.Core.Application.Features.Event;
 
-internal class CreateEventHandler : ICommandHandler<CreateEventCommand>
+internal class UpdateTimesHandler : ICommandHandler<UpdateTimesCommand>
 {
     private readonly IEventRepository _repo;
     private readonly IUnitOfWork _uow;
 
-    internal CreateEventHandler(IEventRepository repo, IUnitOfWork uow)
+    internal UpdateTimesHandler(IEventRepository repo, IUnitOfWork uow)
     {
         _repo = repo;
         _uow = uow;
     }
 
-    public async Task<Result> HandleAsync(CreateEventCommand command)
+    public async Task<Result> HandleAsync(UpdateTimesCommand command)
     {
-        var eventResult = ViaEvent.Create(command.Id);
-        if (eventResult is Failure<ViaEvent> failure)
-            return ResultHelper.Failure<None>(failure.Errors);
+        var evt = await _repo.GetByIdAsync(command.EventId);
+        if (evt is null)
+            return ResultHelper.Failure<None>(EventErrors.Event.NotFound);
 
-        var evt = ((Success<ViaEvent>)eventResult).Value;
+        var result = evt.UpdateTimes(command.Times, DateTime.Now);
+        if (result is Failure<None>)
+            return result;
 
-        await _repo.AddAsync(evt);
         await _uow.SaveChangesAsync();
-
-        return ResultHelper.Success();
+        return result;
     }
 }

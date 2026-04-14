@@ -24,14 +24,17 @@ public class ViaEvent : EntityBase<EventId>
         Times = times;
     }
 
-    public static Result<ViaEvent> Create()
+    public static Result<ViaEvent> Create() => Create(null);
+
+    public static Result<ViaEvent> Create(EventId? id)
     {
-        Result<EventId> idResult = EventId.New();
-
-        if (idResult is Failure<EventId> f)
-            return ResultHelper.Failure<ViaEvent>(f.Errors);
-
-        var id = ((Success<EventId>)idResult).Value;
+        if (id is null)
+        {
+            Result<EventId> idResult = EventId.New();
+            if (idResult is Failure<EventId> f)
+                return ResultHelper.Failure<ViaEvent>(f.Errors);
+            id = ((Success<EventId>)idResult).Value;
+        }
 
         Result<EventMaxGuests> maxGuest = EventMaxGuests.Create(5);
 

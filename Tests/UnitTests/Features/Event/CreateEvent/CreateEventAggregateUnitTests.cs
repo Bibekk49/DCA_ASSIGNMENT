@@ -2,7 +2,7 @@ using DCA_ASSIGNMENT.Core.Domain.Aggregates.Events;
 using DCA_ASSIGNMENT.Core.Tools.OperationResult;
 using DomainEvent = DCA_ASSIGNMENT.Core.Domain.Aggregates.Events.ViaEvent;
 
-namespace UnitTests.Features.Events.CreateEvent;
+namespace UnitTests.Features.Event.CreateEvent;
 
 public class CreateEventAggregateUnitTests
 {
