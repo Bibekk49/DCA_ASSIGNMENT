@@ -12,10 +12,12 @@ public sealed class EventTimes
     private static readonly TimeSpan MinimumAllowedDuration = TimeSpan.FromHours(1);
     private static readonly TimeSpan MaximumAllowedDuration = TimeSpan.FromHours(10);
 
-    public DateOnly StartDate { get; }
-    public TimeOnly StartTime { get; }
-    public DateOnly EndDate { get; }
-    public TimeOnly EndTime { get; }
+    public DateOnly StartDate { get; init; }
+    public TimeOnly StartTime { get; init; }
+    public DateOnly EndDate { get; init; }
+    public TimeOnly EndTime { get; init; }
+
+    private EventTimes() { }
 
     private EventTimes(DateOnly startDate, TimeOnly startTime, DateOnly endDate, TimeOnly endTime)
     {

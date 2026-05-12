@@ -14,6 +14,8 @@ public sealed class EventTitle : ValueObject
 
     private EventTitle(string title) => Value = title;
 
+    internal static EventTitle Reconstitute(string value) => new(value);
+
     protected override IEnumerable<object> GetEqualityComponents()
     {
         yield return Value;

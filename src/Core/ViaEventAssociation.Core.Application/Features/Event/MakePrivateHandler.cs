@@ -19,7 +19,7 @@ internal class MakePrivateHandler : ICommandHandler<MakePrivateCommand>
 
     public async Task<Result> HandleAsync(MakePrivateCommand command)
     {
-        var evt = await _repo.GetByIdAsync(command.EventId);
+        var evt = await _repo.GetAsync(command.EventId);
         if (evt is null)
             return ResultHelper.Failure<None>(EventErrors.Event.NotFound);
 
@@ -28,6 +28,7 @@ internal class MakePrivateHandler : ICommandHandler<MakePrivateCommand>
             return result;
 
         await _uow.SaveChangesAsync();
+        
         return result;
     }
 }

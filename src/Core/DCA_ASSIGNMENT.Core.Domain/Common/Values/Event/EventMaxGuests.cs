@@ -13,6 +13,8 @@ public sealed class EventMaxGuests : ValueObject
 
     private EventMaxGuests(int maxGuests) => Value = maxGuests;
 
+    internal static EventMaxGuests Reconstitute(int value) => new(value);
+
     protected override IEnumerable<object> GetEqualityComponents()
     {
         yield return Value;

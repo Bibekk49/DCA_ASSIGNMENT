@@ -13,6 +13,8 @@ public sealed class EventDescription : ValueObject
 
     private EventDescription(string description) => Value = description;
 
+    internal static EventDescription Reconstitute(string value) => new(value);
+
     protected override IEnumerable<object> GetEqualityComponents()
     {
         yield return Value;
