@@ -1,17 +1,17 @@
 # Assignment 5 – Feature Status
 
 * [x] UC1 – Create Event
-  * [ ] command
-  * [ ] handler
+  * [X] command
+  * [X] handler
 * [x] UC2 – Update Title
   * [x] command
   * [x] handler
 * [x] UC3 – Update Description
   * [x] command
   * [x] handler
-* [ ] UC4 – Update Times
-  * [ ] command
-  * [ ] handler
+* [X] UC4 – Update Times
+  * [X] command
+  * [X] handler
 * [x] UC5 – Make Event Public
   * [x] command
   * [x] handler

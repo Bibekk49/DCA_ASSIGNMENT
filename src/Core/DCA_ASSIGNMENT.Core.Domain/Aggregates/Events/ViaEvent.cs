@@ -14,6 +14,8 @@ public class ViaEvent : EntityBase<EventId>
     internal EventTimes? Times;
 
     
+    private ViaEvent() { }
+
     private ViaEvent(EventId id, EventTitle eventTitle, EventDescription eventDescription, EventStatus eventStatus, EventMaxGuests eventMaxGuests ,EventVisibility eventVisibility, EventTimes? times) : base(id)
     {
         Title = eventTitle;

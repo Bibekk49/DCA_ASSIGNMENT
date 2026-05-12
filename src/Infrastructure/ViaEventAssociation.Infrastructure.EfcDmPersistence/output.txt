@@ -1,0 +1,18 @@
+Build started...
+Build succeeded.
+The Entity Framework tools version '9.0.3' is older than that of the runtime '9.0.4'. Update the tools for the latest features and bug fixes. See https://aka.ms/AAc1fbw for more information.
+CREATE TABLE "Events" (
+    "Id" TEXT NOT NULL CONSTRAINT "PK_Events" PRIMARY KEY,
+    "Description" TEXT NOT NULL,
+    "Visibility" TEXT NOT NULL,
+    "MaxGuestNumber" INTEGER NOT NULL,
+    "Status" TEXT NOT NULL,
+    "Title" TEXT NOT NULL,
+    "StartDate" TEXT NULL,
+    "StartTime" TEXT NULL,
+    "EndDate" TEXT NULL,
+    "EndTime" TEXT NULL
+);
+
+
+

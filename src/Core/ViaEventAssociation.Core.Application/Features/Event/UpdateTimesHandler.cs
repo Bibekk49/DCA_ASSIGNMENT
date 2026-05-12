@@ -19,7 +19,7 @@ internal class UpdateTimesHandler : ICommandHandler<UpdateTimesCommand>
 
     public async Task<Result> HandleAsync(UpdateTimesCommand command)
     {
-        var evt = await _repo.GetByIdAsync(command.EventId);
+        var evt = await _repo.GetAsync(command.EventId);
         if (evt is null)
             return ResultHelper.Failure<None>(EventErrors.Event.NotFound);
 

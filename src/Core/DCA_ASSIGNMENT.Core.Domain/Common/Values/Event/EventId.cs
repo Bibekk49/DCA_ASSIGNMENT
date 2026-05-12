@@ -25,4 +25,12 @@ public sealed class EventId
 
     public static Result<EventId> New()
         => Create(Guid.NewGuid());
+
+    internal static EventId Reconstitute(Guid value) => new(value);
+
+    public override bool Equals(object? obj) => obj is EventId other && Value == other.Value;
+    public override int GetHashCode() => Value.GetHashCode();
+    public static bool operator ==(EventId? a, EventId? b) =>
+        a is null ? b is null : a.Equals(b);
+    public static bool operator !=(EventId? a, EventId? b) => !(a == b);
 }
