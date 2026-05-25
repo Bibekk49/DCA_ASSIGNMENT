@@ -5,3 +5,4 @@ global using ViaEventAssociation.Infrastructure.EfcDmPersistence.VeaEventPersist
 global using ViaEventAssociation.Infrastructure.EfcDmPersistence.UnitOfWork;
 global using Microsoft.EntityFrameworkCore;
 global using Microsoft.Data.Sqlite;
+global using Xunit;
