@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace ViaEventAssociation.Infrastructure.EfcDmPersistence.UnitOfWork;
 
-public class SqliteUnitOfWork(DbContext context) : IUnitOfWork
+public class SqliteUnitOfWork(EfcDbContext context) : IUnitOfWork
 {
     public Task SaveChangesAsync() => context.SaveChangesAsync();
 }

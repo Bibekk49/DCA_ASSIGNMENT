@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace ViaEventAssociation.Infrastructure.EfcDmPersistence;
 
-public class EfcDbContext(DbContextOptions options) : DbContext(options)
+public class EfcDbContext(DbContextOptions<EfcDbContext> options) : DbContext(options)
 {
     public DbSet<ViaEvent> Events => Set<ViaEvent>();
 

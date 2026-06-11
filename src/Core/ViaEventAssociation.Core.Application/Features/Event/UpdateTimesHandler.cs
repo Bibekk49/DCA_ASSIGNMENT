@@ -6,12 +6,12 @@ using ViaEventAssociation.Core.Application.CommandDispaching.Commands.Event;
 
 namespace ViaEventAssociation.Core.Application.Features.Event;
 
-internal class UpdateTimesHandler : ICommandHandler<UpdateTimesCommand>
+public class UpdateTimesHandler : ICommandHandler<UpdateTimesCommand>
 {
     private readonly IEventRepository _repo;
     private readonly IUnitOfWork _uow;
 
-    internal UpdateTimesHandler(IEventRepository repo, IUnitOfWork uow)
+    public UpdateTimesHandler(IEventRepository repo, IUnitOfWork uow)
     {
         _repo = repo;
         _uow = uow;

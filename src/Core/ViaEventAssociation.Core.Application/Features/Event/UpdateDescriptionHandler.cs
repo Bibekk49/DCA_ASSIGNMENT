@@ -6,12 +6,12 @@ using ViaEventAssociation.Core.Application.CommandDispaching.Commands.Event;
 
 namespace ViaEventAssociation.Core.Application.Features.Event;
 
-internal class UpdateDescriptionHandler : ICommandHandler<UpdateDescriptionCommand>
+public class UpdateDescriptionHandler : ICommandHandler<UpdateDescriptionCommand>
 {
     private readonly IEventRepository _repo;
     private readonly IUnitOfWork _uow;
 
-    internal UpdateDescriptionHandler(IEventRepository repo, IUnitOfWork uow)
+    public UpdateDescriptionHandler(IEventRepository repo, IUnitOfWork uow)
     {
         _repo = repo;
         _uow = uow;
