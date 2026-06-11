@@ -8,7 +8,8 @@ using ViaEventAssociation.Presentation.WebAPI.MappingConfigurations;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.AddControllers();
+builder.Services.AddControllers()
+    .AddJsonOptions(o => o.JsonSerializerOptions.Converters.Add(new ViaEventAssociation.Presentation.WebAPI.Infrastructure.TimeOnlyJsonConverter()));
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(c =>
 {
@@ -44,6 +45,12 @@ builder.Services.AddScoped<IMappingConfig<BrowseUpcomingEventsRequest, BrowseUpc
 builder.Services.AddScoped<IMappingConfig<BrowseUpcomingEvents.Answer, BrowseUpcomingEventsResponse>, BrowseUpcomingEventsAnswerToResponse>();
 
 var app = builder.Build();
+
+using (var scope = app.Services.CreateScope())
+{
+    var db = scope.ServiceProvider.GetRequiredService<ViaEventAssociation.Infrastructure.EfcDmPersistence.EfcDbContext>();
+    db.Database.EnsureCreated();
+}
 
 app.MapControllers();
 

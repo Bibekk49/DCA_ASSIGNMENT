@@ -38,7 +38,7 @@ public class BrowseUpcomingEventsEndpoint(IQueryDispatcher dispatcher, IMapper m
     /// <response code="200">Paginated list of upcoming events</response>
     [HttpGet("events")]
     [ProducesResponseType(typeof(BrowseUpcomingEventsResponse), StatusCodes.Status200OK)]
-    public override async Task<Ok<BrowseUpcomingEventsResponse>> HandleAsync(BrowseUpcomingEventsRequest request)
+    public override async Task<Ok<BrowseUpcomingEventsResponse>> HandleAsync([FromQuery] BrowseUpcomingEventsRequest request)
     {
         var query = mapper.Map<BrowseUpcomingEvents.Query>(request);
         var answer = await dispatcher.DispatchAsync(query);

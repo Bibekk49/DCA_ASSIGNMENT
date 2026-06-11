@@ -9,10 +9,12 @@ public class BrowseUpcomingEventsQueryHandler(ReadDbContext context, ISystemTime
 {
     public async Task<BrowseUpcomingEvents.Answer> HandleAsync(BrowseUpcomingEvents.Query query)
     {
-        var now = currentTime.CurrentTime().ToString("yyyy-MM-ddTHH:mm:ss");
+        var now = currentTime.CurrentTime().ToString("yyyy-MM-dd HH:mm:ss");
 
         var baseQuery = context.Events
-            .Where(e => e.Status == "active" && e.StartDate != null && string.Compare(e.StartDate + " " + e.StartTime, now) >= 0);
+            .Where(e => e.Status == "ACTIVE" && e.Visibility == "PUBLIC"
+                        && e.StartDate != null
+                        && string.Compare(e.StartDate + " " + e.StartTime, now) >= 0);
 
         if (!string.IsNullOrWhiteSpace(query.TitleSearch))
             baseQuery = baseQuery.Where(e => e.Title.Contains(query.TitleSearch));
