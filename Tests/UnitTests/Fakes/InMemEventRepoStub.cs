@@ -13,9 +13,16 @@ public class InMemEventRepoStub : IEventRepository
         return Task.CompletedTask;
     }
 
-    public Task<ViaEvent?> GetByIdAsync(EventId id)
+    public Task<ViaEvent?> GetAsync(EventId id)
     {
         var evt = Events.FirstOrDefault(e => e.Id.Value == id.Value);
         return Task.FromResult(evt);
+    }
+
+    public Task RemoveAsync(EventId id)
+    {
+        var evt = Events.FirstOrDefault(e => e.Id.Value == id.Value);
+        if (evt is not null) Events.Remove(evt);
+        return Task.CompletedTask;
     }
 }

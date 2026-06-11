@@ -14,5 +14,11 @@
       <AssemblyAttribute Include="System.Runtime.CompilerServices.InternalsVisibleTo">
         <_Parameter1>UnitTests</_Parameter1>
       </AssemblyAttribute>
+      <AssemblyAttribute Include="System.Runtime.CompilerServices.InternalsVisibleTo">
+        <_Parameter1>ViaEventAssociation.Infrastructure.EfcDmPersistence</_Parameter1>
+      </AssemblyAttribute>
+      <AssemblyAttribute Include="System.Runtime.CompilerServices.InternalsVisibleTo">
+        <_Parameter1>IntegrationTests</_Parameter1>
+      </AssemblyAttribute>
     </ItemGroup>
 </Project>
