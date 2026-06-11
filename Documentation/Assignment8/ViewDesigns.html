@@ -1,0 +1,483 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>VIA Event Association – View Designs</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f4f4f4;
+      color: #111;
+      margin: 0;
+      padding: 40px 20px;
+    }
+
+    h1 { text-align: center; font-size: 22px; margin-bottom: 6px; }
+    .page-sub { text-align: center; font-size: 13px; color: #666; margin-bottom: 40px; }
+
+    /* Each view is a "slide" */
+    .slide {
+      background: #fff;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      max-width: 660px;
+      margin: 0 auto 48px;
+      overflow: hidden;
+    }
+
+    .slide-label {
+      background: #222;
+      color: #fff;
+      font-size: 12px;
+      font-weight: bold;
+      padding: 5px 14px;
+      letter-spacing: .05em;
+      text-transform: uppercase;
+    }
+
+    .slide-body { padding: 20px; }
+
+    /* URL bar */
+    .url-bar {
+      display: inline-block;
+      background: #f0f0f0;
+      border: 1px solid #ccc;
+      border-radius: 3px;
+      padding: 4px 10px;
+      font-size: 12px;
+      color: #555;
+      margin-bottom: 18px;
+    }
+
+    /* ── SHARED COMPONENTS ── */
+    .search-input {
+      border: 1px solid #999;
+      border-radius: 3px;
+      padding: 5px 10px;
+      font-size: 13px;
+      color: #aaa;
+      width: 240px;
+      margin-bottom: 16px;
+      display: block;
+    }
+
+    .box {
+      border: 1px solid #bbb;
+      border-radius: 3px;
+      margin-bottom: 10px;
+    }
+    .box-header {
+      background: #f5f5f5;
+      border-bottom: 1px solid #bbb;
+      padding: 7px 12px;
+      font-size: 13px;
+      font-weight: bold;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .box-header .meta { font-weight: normal; font-size: 12px; color: #666; }
+    .box-body { padding: 8px 12px; }
+
+    .row {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      font-size: 13px;
+      padding: 4px 0;
+      border-bottom: 1px dashed #eee;
+    }
+    .row:last-child { border-bottom: none; }
+    .row .title { color: #222; }
+    .row .detail { color: #777; font-size: 12px; }
+    .row .link { font-size: 12px; color: #0070cc; text-decoration: underline; }
+
+    .desc-text { font-size: 12px; color: #555; line-height: 1.5; margin-bottom: 8px; }
+
+    .badge {
+      display: inline-block;
+      background: #e8e8e8;
+      border-radius: 10px;
+      padding: 2px 9px;
+      font-size: 12px;
+      color: #333;
+    }
+    .badge-blue { background: #ddeeff; color: #004a8f; }
+
+    .two-col {
+      display: flex;
+      gap: 16px;
+    }
+    .two-col > * { flex: 1; }
+
+    .col-header {
+      font-size: 12px;
+      font-weight: bold;
+      text-transform: uppercase;
+      color: #888;
+      letter-spacing: .04em;
+      margin-bottom: 6px;
+    }
+
+    .pill-list { display: flex; flex-direction: column; gap: 5px; }
+    .pill {
+      border: 1px solid #ccc;
+      border-radius: 3px;
+      padding: 5px 10px;
+      font-size: 13px;
+    }
+
+    /* Profile view specifics */
+    .profile-header {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      margin-bottom: 16px;
+    }
+    .avatar {
+      width: 50px; height: 50px;
+      background: #ddd;
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 11px; color: #888;
+      border: 1px solid #bbb;
+    }
+    .profile-name { font-size: 16px; font-weight: bold; }
+    .profile-email { font-size: 12px; color: #666; }
+    .envelope {
+      margin-left: auto;
+      border: 1px solid #bbb;
+      border-radius: 3px;
+      padding: 4px 10px;
+      font-size: 12px;
+      color: #555;
+    }
+    .upcoming-count { font-size: 13px; color: #333; margin-bottom: 10px; }
+
+    /* Pagination */
+    .pagination {
+      text-align: center;
+      font-size: 13px;
+      margin-top: 14px;
+      color: #555;
+    }
+    .pagination span { margin: 0 4px; }
+    .pagination .cur { font-weight: bold; color: #111; }
+
+    /* Single event */
+    .event-detail-grid {
+      display: flex;
+      gap: 20px;
+      margin-top: 10px;
+    }
+    .event-detail-left { flex: 2; }
+    .event-detail-right { flex: 1; border-left: 1px solid #ddd; padding-left: 16px; }
+    .detail-line { font-size: 13px; margin-bottom: 6px; }
+    .detail-line .lbl { color: #888; font-size: 11px; text-transform: uppercase; }
+
+    .guest-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 8px;
+      margin-top: 8px;
+    }
+    .guest-cell {
+      border: 1px solid #ddd;
+      border-radius: 3px;
+      padding: 6px;
+      text-align: center;
+      font-size: 11px;
+    }
+    .guest-avatar {
+      width: 28px; height: 28px;
+      background: #e0e0e0;
+      border-radius: 50%;
+      margin: 0 auto 4px;
+    }
+
+    /* Custom view card */
+    .location-card { margin-bottom: 10px; }
+
+    /* Notes box */
+    .notes {
+      border: 1px dashed #ccc;
+      border-radius: 3px;
+      background: #fafafa;
+      padding: 10px 14px;
+      font-size: 12px;
+      color: #555;
+      margin-top: 20px;
+      line-height: 1.6;
+    }
+    .notes strong { color: #222; }
+  </style>
+</head>
+<body>
+
+<h1>VIA Event Association — View Designs</h1>
+<p class="page-sub">UI sketches for Assignment 8 — one section per view</p>
+
+
+<!-- ═══════════════════════════════════════════
+     VIEW 1 — Personal Profile Page
+════════════════════════════════════════════ -->
+<div class="slide">
+  <div class="slide-label">View 1 — Personal Profile Page</div>
+  <div class="slide-body">
+
+    <div class="url-bar">www.vea.dk/guest/e1d050e5-3cc7-4c17-...</div>
+
+    <div class="profile-header">
+      <div class="avatar">Photo</div>
+      <div>
+        <div class="profile-name">Bibek Paudel</div>
+        <div class="profile-email">bibek@via.dk</div>
+      </div>
+      <div class="envelope">✉ 2</div>
+    </div>
+
+    <div class="upcoming-count">You have <strong>3</strong> upcoming events.</div>
+
+    <div class="box">
+      <div class="box-header">Upcoming events <span class="meta">ordered by date</span></div>
+      <div class="box-body">
+        <div class="row">
+          <span class="title">Scary Movie Night!</span>
+          <span class="detail">Attendees: 17 &nbsp;|&nbsp; 08/03/24, at 19:00</span>
+          <span class="link">see event</span>
+        </div>
+        <div class="row">
+          <span class="title">Campus Horsens Run!</span>
+          <span class="detail">Attendees: 34 &nbsp;|&nbsp; 13/04/24, at 16:00</span>
+          <span class="link">see event</span>
+        </div>
+        <div class="row">
+          <span class="title">…</span>
+          <span class="link">see event</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="box">
+      <div class="box-header">Past events <span class="meta">newest first, max 5</span></div>
+      <div class="box-body">
+        <div class="row"><span class="title">Lan party</span><span class="link">see event</span></div>
+        <div class="row"><span class="title">Brunch</span><span class="link">see event</span></div>
+        <div class="row"><span class="title">Lunch</span><span class="link">see event</span></div>
+        <div class="row"><span class="title">Artsy Exhibition</span><span class="link">see event</span></div>
+        <div class="row"><span class="title">Makerspace in…</span><span class="link">see event</span></div>
+      </div>
+    </div>
+
+    <div class="notes">
+      <strong>Data needed:</strong> Guest name + email, count of upcoming events this guest attends,
+      list of upcoming events (title, attendee count, date, start time),
+      list of past events (title only, newest first, limit 5), pending invitation count.
+    </div>
+
+  </div>
+</div>
+
+
+<!-- ═══════════════════════════════════════════
+     VIEW 2 — Browse Upcoming Events
+════════════════════════════════════════════ -->
+<div class="slide">
+  <div class="slide-label">View 2 — Browse Upcoming Events</div>
+  <div class="slide-body">
+
+    <div class="url-bar">www.vea.dk/events/upcoming?page=1</div>
+
+    <input class="search-input" type="text" placeholder="Search event title…" readonly />
+
+    <div class="box">
+      <div class="box-header">Scary Movie Night! <span class="meta">21/30 &nbsp;|&nbsp; 08/03/24, at 19:00 &nbsp;|&nbsp; <span class="badge badge-blue">Public</span></span></div>
+      <div class="box-body">
+        <div class="desc-text">Come watch some of the classic horror movies. Bring your own popcorn and…</div>
+      </div>
+    </div>
+
+    <div class="box">
+      <div class="box-header">Chess tournament <span class="meta">12/20 &nbsp;|&nbsp; 15/03/24, at 14:00 &nbsp;|&nbsp; <span class="badge badge-blue">Public</span></span></div>
+      <div class="box-body">
+        <div class="desc-text">Tournament for all skill levels. Come learn the rules, eat snacks, have fun.</div>
+      </div>
+    </div>
+
+    <div class="box">
+      <div class="box-header">Pizza party <span class="meta">12/50 &nbsp;|&nbsp; 20/03/24, at 17:00 &nbsp;|&nbsp; <span class="badge">Private</span></span></div>
+      <div class="box-body">
+        <div class="desc-text">Pizza party for 3rd semester SWT. Meet students from other classes, maybe…</div>
+      </div>
+    </div>
+
+    <div class="pagination">
+      <span>◀</span>
+      <span class="cur">1</span>
+      <span>/</span>
+      <span>3</span>
+      <span>▶</span>
+    </div>
+
+    <div class="notes">
+      <strong>Data needed:</strong> Active events with start date in the future — title, description (truncated),
+      attendee count / max guests, date, start time, visibility. Supports title search and paging.
+    </div>
+
+  </div>
+</div>
+
+
+<!-- ═══════════════════════════════════════════
+     VIEW 3 — View Single Event
+════════════════════════════════════════════ -->
+<div class="slide">
+  <div class="slide-label">View 3 — View Single Event</div>
+  <div class="slide-body">
+
+    <div class="url-bar">www.vea.dk/events/e1d050e5-3cc7-4c17-...</div>
+
+    <div style="font-size:18px; font-weight:bold; margin-bottom:6px;">Scary Movie Night!</div>
+    <div class="desc-text" style="margin-bottom:14px;">
+      Come watch some of the classic horror movies. Bring your own popcorn and maybe a date to hold
+      their hand when things get too scary. Or hold a stranger's hand.
+      We have 2 movies planned for the evening. Be quick to sign up, we only have 30 seats.
+    </div>
+
+    <div class="event-detail-grid">
+      <div class="event-detail-left">
+        <div class="detail-line"><span class="lbl">Location</span><br/>C05.19</div>
+        <div class="detail-line"><span class="lbl">Date</span><br/>8/3-24</div>
+        <div class="detail-line"><span class="lbl">Time</span><br/>19:00 – 24:00</div>
+        <div class="detail-line"><span class="lbl">Visibility</span><br/><span class="badge badge-blue">Public</span></div>
+        <div style="margin-top:10px;"><button style="font-size:12px;padding:5px 14px;border:1px solid #bbb;border-radius:3px;background:#f5f5f5;cursor:pointer;">Participate</button></div>
+      </div>
+      <div class="event-detail-right">
+        <div class="detail-line"><span class="lbl">Attendees</span><br/><strong>21 / 30</strong></div>
+        <div class="detail-line" style="margin-top:10px;"><span class="lbl">Guest list (1–9 of 21)</span></div>
+        <div class="guest-grid">
+          <div class="guest-cell"><div class="guest-avatar"></div>Anna K.</div>
+          <div class="guest-cell"><div class="guest-avatar"></div>Lars P.</div>
+          <div class="guest-cell"><div class="guest-avatar"></div>Nina M.</div>
+          <div class="guest-cell"><div class="guest-avatar"></div>Erik S.</div>
+          <div class="guest-cell"><div class="guest-avatar"></div>Mia T.</div>
+          <div class="guest-cell"><div class="guest-avatar"></div>Ole B.</div>
+          <div class="guest-cell"><div class="guest-avatar"></div>Sara J.</div>
+          <div class="guest-cell"><div class="guest-avatar"></div>Tom R.</div>
+          <div class="guest-cell"><div class="guest-avatar"></div>Lisa V.</div>
+        </div>
+        <div class="pagination" style="margin-top:8px;">▲ &nbsp; 1–9 / 21 &nbsp; ▼</div>
+      </div>
+    </div>
+
+    <div class="notes">
+      <strong>Data needed:</strong> Event title, description, location name, date, start/end time, visibility,
+      max guests, attendee count, paginated guest list (photo placeholder + name).
+    </div>
+
+  </div>
+</div>
+
+
+<!-- ═══════════════════════════════════════════
+     VIEW 4 — Events Editing Overview
+════════════════════════════════════════════ -->
+<div class="slide">
+  <div class="slide-label">View 4 — Events Editing Overview</div>
+  <div class="slide-body">
+
+    <div class="url-bar">www.vea.dk/events/unpublished</div>
+
+    <div style="font-size:15px; font-weight:bold; margin-bottom:14px;">Unpublished events</div>
+
+    <div class="two-col">
+      <div>
+        <div class="col-header">Drafts</div>
+        <div class="pill-list">
+          <div class="pill">Basketball match</div>
+          <div class="pill">Foosball tournament</div>
+        </div>
+      </div>
+      <div>
+        <div class="col-header">Ready</div>
+        <div class="pill-list">
+          <div class="pill">Library book hunting</div>
+          <div class="pill">Easter egg treasure hunt</div>
+        </div>
+      </div>
+      <div>
+        <div class="col-header">Cancelled</div>
+        <div class="pill-list">
+          <div class="pill">Halloween costume party</div>
+          <div class="pill">Friday pub crawl</div>
+          <div class="pill">Morning yoga</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="notes">
+      <strong>Data needed:</strong> Events grouped by status — Draft, Ready, Cancelled.
+      Each group is a separate collection (not sorted client-side). Shows event title only.
+      Clicking an event navigates to the single event view.
+    </div>
+
+  </div>
+</div>
+
+
+<!-- ═══════════════════════════════════════════
+     VIEW 5 — Location Events Overview (custom)
+════════════════════════════════════════════ -->
+<div class="slide">
+  <div class="slide-label">View 5 — Location Events Overview (Custom View)</div>
+  <div class="slide-body">
+
+    <div class="url-bar">www.vea.dk/locations</div>
+
+    <div style="font-size:15px; font-weight:bold; margin-bottom:4px;">Locations &amp; Upcoming Events</div>
+    <div class="desc-text" style="margin-bottom:12px;">All venues ordered by number of upcoming events.</div>
+
+    <input class="search-input" type="text" placeholder="Search location name…" readonly />
+
+    <div class="box location-card">
+      <div class="box-header">Guest Canteen <span class="meta">Max capacity: 50</span> <span class="badge">3 upcoming events</span></div>
+      <div class="box-body">
+        <div class="row"><span class="title">Friday Bar</span><span class="detail">01/03/24, at 15:00 &nbsp;|&nbsp; Max: 50</span></div>
+        <div class="row"><span class="title">Friday Bar The Second</span><span class="detail">08/03/24, at 15:00 &nbsp;|&nbsp; Max: 50</span></div>
+        <div class="row"><span class="title">Board Game Night</span><span class="detail">22/03/24, at 18:00 &nbsp;|&nbsp; Max: 30</span></div>
+      </div>
+    </div>
+
+    <div class="box location-card">
+      <div class="box-header">Atriet <span class="meta">Max capacity: 50</span> <span class="badge">2 upcoming events</span></div>
+      <div class="box-body">
+        <div class="row"><span class="title">Orienteering</span><span class="detail">11/03/24, at 17:00 &nbsp;|&nbsp; Max: 50</span></div>
+        <div class="row"><span class="title">Easter Egg Hunt</span><span class="detail">25/03/24, at 15:00 &nbsp;|&nbsp; Max: 50</span></div>
+      </div>
+    </div>
+
+    <div class="box location-card">
+      <div class="box-header">C05.19 <span class="meta">Max capacity: 40</span> <span class="badge">1 upcoming event</span></div>
+      <div class="box-body">
+        <div class="row"><span class="title">Scary Movie Night</span><span class="detail">06/03/24, at 17:00 &nbsp;|&nbsp; Max: 40</span></div>
+      </div>
+    </div>
+
+    <div class="box location-card">
+      <div class="box-header">Grassfield <span class="meta">Max capacity: 50</span> <span class="badge">0 upcoming events</span></div>
+      <div class="box-body">
+        <div style="font-size:12px;color:#aaa;font-style:italic;">No upcoming events at this location.</div>
+      </div>
+    </div>
+
+    <div class="notes">
+      <strong>Data needed:</strong> All locations (name, max capacity) joined with active upcoming Events.
+      Ordered by event count descending. Uses existing <code>Locations</code> + <code>Events</code> tables only.<br/>
+      <strong>Query:</strong> <code>LocationEventsOverview.Query</code> → <code>LocationEventsOverviewQueryHandler</code>
+    </div>
+
+  </div>
+</div>
+
+</body>
+</html>
