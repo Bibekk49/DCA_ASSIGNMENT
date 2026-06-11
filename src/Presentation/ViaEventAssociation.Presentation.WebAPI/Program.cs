@@ -17,9 +17,6 @@ builder.Services.AddSwaggerGen(c =>
         Title = "VIA Event Association API",
         Version = "v1",
         Description = """
-            REST API for the VIA Event Association system.
-
-            **Event lifecycle:** DRAFT → READY → ACTIVE (CANCELLED is terminal)
 
             **Commands** return `204 No Content` on success, `400 Bad Request` with an array of domain errors on failure.
 
