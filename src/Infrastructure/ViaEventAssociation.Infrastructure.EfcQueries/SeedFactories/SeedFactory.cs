@@ -71,11 +71,11 @@ public static class SeedFactory
         var dir = AppContext.BaseDirectory;
         while (dir != null)
         {
-            var candidate = Path.Combine(dir, "Context", "Assignment8", "ViaEventAssociation");
+            var candidate = Path.Combine(dir, "src", "Infrastructure", "ViaEventAssociation.Infrastructure.EfcQueries", "SeedData");
             if (Directory.Exists(candidate)) return candidate;
             dir = Path.GetDirectoryName(dir);
         }
-        throw new DirectoryNotFoundException("Cannot find Context/Assignment8/ViaEventAssociation data folder");
+        throw new DirectoryNotFoundException("Cannot find SeedData folder");
     }
 
     private record EventJson(string Id, string Title, string Description, string Status, string Visibility, string? Start, string? End, int MaxGuests, string? LocationId);
