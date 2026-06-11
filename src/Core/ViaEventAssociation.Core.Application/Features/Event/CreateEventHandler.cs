@@ -6,12 +6,12 @@ using ViaEventAssociation.Core.Application.CommandDispaching.Commands.Event;
 
 namespace ViaEventAssociation.Core.Application.Features.Event;
 
-internal class CreateEventHandler : ICommandHandler<CreateEventCommand>
+public class CreateEventHandler : ICommandHandler<CreateEventCommand>
 {
     private readonly IEventRepository _repo;
     private readonly IUnitOfWork _uow;
 
-    internal CreateEventHandler(IEventRepository repo, IUnitOfWork uow)
+    public CreateEventHandler(IEventRepository repo, IUnitOfWork uow)
     {
         _repo = repo;
         _uow = uow;
