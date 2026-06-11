@@ -1,19 +1,38 @@
-# Assignment 6 – Feature Status
+# Assignment 6 — Command Dispatcher
 
-* [x] Command Dispatcher
-  * [x] `ICommandDispatcher` interface
-  * [x] `CommandDispatcher` implementation (resolves handlers via `IServiceProvider`)
-  * [x] `LoggingDispatcherDecorator`
-* [x] Interaction tests (ZOMBIES)
-  * [x] Zero – no handler registered → exception
-  * [x] One correct – UC2 handler called
-  * [x] One correct – UC5 handler called
-  * [x] One incorrect – wrong handler registered → exception
-  * [x] Many – both registered, only correct one called (UC2)
-  * [x] Many – both registered, only correct one called (UC5)
-  * [x] Same – handler called exactly once
-* [x] Decorator tests (`DispatcherLoggingDecoratorTests`)
-* [x] Challenge: auto-register handlers via `IServiceCollection` extension method
-  * [x] Scans assembly via reflection
-  * [x] Registers all `ICommandHandler<T>` implementations automatically
-  * [x] Auto-registration tests
+## Core Components
+
+| Item | Location | Status |
+|---|---|---|
+| `ICommandDispatcher` interface | `Application/CommandDispaching/` | ✅ |
+| `CommandDispatcher` (resolves `ICommandHandler<T>` from `IServiceProvider`) | `Application/CommandDispaching/` | ✅ |
+| `LoggingDispatcherDecorator` (wraps dispatcher, logs before/after dispatch) | `Application/CommandDispaching/` | ✅ |
+| `IServiceCollection` extension — auto-registers all handlers via reflection | `Application/Extensions/` | ✅ |
+
+## Dispatcher Interaction Tests (ZOMBIES)
+
+| Test | Description | Status |
+|---|---|---|
+| Zero | No handler registered → exception thrown | ✅ |
+| One (UC2) | Correct handler registered and called | ✅ |
+| One (UC5) | Correct handler registered and called | ✅ |
+| One incorrect | Wrong handler registered → exception | ✅ |
+| Many (UC2) | Both handlers registered, only correct one called | ✅ |
+| Many (UC5) | Both handlers registered, only correct one called | ✅ |
+| Same | Handler called exactly once per dispatch | ✅ |
+
+## Logging Decorator Tests
+
+| Test | Description | Status |
+|---|---|---|
+| Success path | Log written before and after successful dispatch | ✅ |
+| Failure path | Log written; failure result propagated | ✅ |
+| No double-dispatch | Underlying handler called exactly once | ✅ |
+| Decorator wraps correctly | `ICommandDispatcher` contract satisfied | ✅ |
+
+## Auto-Registration Tests
+
+| Test | Description | Status |
+|---|---|---|
+| All 9 handlers registered | Reflection finds UC1–UC9 handlers | ✅ |
+| Correct handler resolved | `IServiceProvider.GetService<ICommandHandler<T>>` returns right type | ✅ |

@@ -12,7 +12,18 @@ public record UpdateTimesBody(DateOnly StartDate, TimeOnly StartTime, DateOnly E
 public class UpdateTimesEndpoint(ICommandDispatcher dispatcher)
     : ApiEndpoint.WithRequest<UpdateTimesBody>.AndResults<NoContent, BadRequest<IEnumerable<ResultError>>>
 {
+    /// <summary>Update event start/end times (UC4)</summary>
+    /// <remarks>
+    /// Rules: start ≥ 08:00, duration 1–10 h, start must be in the future.
+    /// Same-day: end &gt; start. Overnight (end = start+1 day): end ≤ 01:00.
+    /// Reverts a READY event to DRAFT.
+    /// </remarks>
+    /// <param name="request">Start and end date/time</param>
+    /// <response code="204">Times updated</response>
+    /// <response code="400">Validation or business rule failure</response>
     [HttpPost("events/{id}/update-times")]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesResponseType(typeof(IEnumerable<ResultError>), StatusCodes.Status400BadRequest)]
     public override async Task<Results<NoContent, BadRequest<IEnumerable<ResultError>>>> HandleAsync(UpdateTimesBody request)
     {
         var id = HttpContext.Request.RouteValues["id"]?.ToString() ?? "";

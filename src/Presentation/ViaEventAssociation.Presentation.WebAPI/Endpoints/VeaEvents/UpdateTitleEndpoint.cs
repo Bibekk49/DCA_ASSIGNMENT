@@ -12,7 +12,14 @@ public record UpdateTitleBody(string Title);
 public class UpdateTitleEndpoint(ICommandDispatcher dispatcher)
     : ApiEndpoint.WithRequest<UpdateTitleBody>.AndResults<NoContent, BadRequest<IEnumerable<ResultError>>>
 {
+    /// <summary>Update event title (UC2)</summary>
+    /// <remarks>3–75 characters. Blocked on ACTIVE, COMPLETED, or CANCELLED events. Reverts a READY event to DRAFT.</remarks>
+    /// <param name="request">New title</param>
+    /// <response code="204">Title updated</response>
+    /// <response code="400">Validation or business rule failure</response>
     [HttpPost("events/{id}/update-title")]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesResponseType(typeof(IEnumerable<ResultError>), StatusCodes.Status400BadRequest)]
     public override async Task<Results<NoContent, BadRequest<IEnumerable<ResultError>>>> HandleAsync(UpdateTitleBody request)
     {
         var id = HttpContext.Request.RouteValues["id"]?.ToString() ?? "";

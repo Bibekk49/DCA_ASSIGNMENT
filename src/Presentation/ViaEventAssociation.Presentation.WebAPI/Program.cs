@@ -10,7 +10,26 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+builder.Services.AddSwaggerGen(c =>
+{
+    c.SwaggerDoc("v1", new()
+    {
+        Title = "VIA Event Association API",
+        Version = "v1",
+        Description = """
+            REST API for the VIA Event Association system.
+
+            **Event lifecycle:** DRAFT → READY → ACTIVE (CANCELLED is terminal)
+
+            **Commands** return `204 No Content` on success, `400 Bad Request` with an array of domain errors on failure.
+
+            **Queries** return the requested resource directly.
+            """
+    });
+    var xmlFile = $"{System.Reflection.Assembly.GetExecutingAssembly().GetName().Name}.xml";
+    var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
+    if (File.Exists(xmlPath)) c.IncludeXmlComments(xmlPath);
+});
 
 var writeDb = builder.Configuration.GetConnectionString("WriteDb") ?? "Data Source=VEADatabase.db";
 var readDb = builder.Configuration.GetConnectionString("ReadDb") ?? "Data Source=VEADatabase.db";
@@ -31,11 +50,10 @@ var app = builder.Build();
 
 app.MapControllers();
 
-if (app.Environment.IsDevelopment())
-{
-    app.UseSwagger();
-    app.UseSwaggerUI();
-}
+app.UseSwagger();
+app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "VEA API v1"));
+
+app.MapGet("/", () => Results.Redirect("/swagger")).ExcludeFromDescription();
 
 app.UseHttpsRedirection();
 app.Run();

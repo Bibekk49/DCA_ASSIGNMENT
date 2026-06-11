@@ -131,6 +131,73 @@ public class ViaEvent : EntityBase<EventId>
         return ResultHelper.Success();
     }
 
+    public Result<None> SetMaxGuests(EventMaxGuests maxGuests)
+    {
+        if (Status == EventStatus.CANCELLED)
+            return EventErrors.Status.CannotModifyCancelled;
+
+        if (Status == EventStatus.COMPLETED)
+            return EventErrors.Status.CannotModifyActive;
+
+        if (Status == EventStatus.ACTIVE)
+        {
+            if (maxGuests.Value < MaxGuestNumber.Value)
+                return EventErrors.MaxGuests.CannotReduceWhenActive;
+            MaxGuestNumber = maxGuests;
+            return ResultHelper.Success();
+        }
+
+        if (Status == EventStatus.READY)
+            Status = EventStatus.DRAFT;
+
+        MaxGuestNumber = maxGuests;
+        return ResultHelper.Success();
+    }
+
+    public Result<None> MakeReady(DateTime now)
+    {
+        if (Status == EventStatus.CANCELLED)
+            return EventErrors.Status.CannotModifyCancelled;
+
+        if (Status is EventStatus.ACTIVE or EventStatus.COMPLETED)
+            return EventErrors.Status.CannotModifyActive;
+
+        if (Title.Value == "Working Title")
+            return EventErrors.Ready.TitleIsDefault;
+
+        if (Times is null)
+            return EventErrors.Ready.TimesNotSet;
+
+        var startDateTime = Times.StartDate.ToDateTime(Times.StartTime);
+        if (startDateTime <= now)
+            return EventErrors.Ready.EventIsInThePast;
+
+        Status = EventStatus.READY;
+        return ResultHelper.Success();
+    }
+
+    public Result<None> Activate(DateTime now)
+    {
+        if (Status == EventStatus.CANCELLED)
+            return EventErrors.Status.CannotModifyCancelled;
+
+        if (Status == EventStatus.COMPLETED)
+            return EventErrors.Status.CannotModifyActive;
+
+        if (Status == EventStatus.ACTIVE)
+            return ResultHelper.Success();
+
+        if (Status == EventStatus.DRAFT)
+        {
+            var readyResult = MakeReady(now);
+            if (readyResult is Failure<None>)
+                return readyResult;
+        }
+
+        Status = EventStatus.ACTIVE;
+        return ResultHelper.Success();
+    }
+
     public Result<None> MakePrivate()
     {
         if (Status == EventStatus.CANCELLED)

@@ -10,7 +10,13 @@ namespace ViaEventAssociation.Presentation.WebAPI.Endpoints.VeaEvents;
 public class MakePublicEndpoint(ICommandDispatcher dispatcher)
     : ApiEndpoint.WithoutRequest.AndResults<NoContent, BadRequest<IEnumerable<ResultError>>>
 {
+    /// <summary>Make event publicly visible (UC5)</summary>
+    /// <remarks>Blocked on CANCELLED events. Allowed in DRAFT, READY, and ACTIVE.</remarks>
+    /// <response code="204">Visibility set to PUBLIC</response>
+    /// <response code="400">Business rule failure (e.g. event is cancelled)</response>
     [HttpPost("events/{id}/make-public")]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesResponseType(typeof(IEnumerable<ResultError>), StatusCodes.Status400BadRequest)]
     public override async Task<Results<NoContent, BadRequest<IEnumerable<ResultError>>>> HandleAsync()
     {
         var id = HttpContext.Request.RouteValues["id"]?.ToString() ?? "";

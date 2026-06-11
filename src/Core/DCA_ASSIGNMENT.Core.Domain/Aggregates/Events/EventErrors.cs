@@ -34,7 +34,13 @@ public static class EventErrors
     public static class MaxGuests
     {
         public static readonly ResultError TooLow =
-            new("EventMaxGuests.TooLow", "Maximum guests must be at least 1.", "Validation");
+            new("EventMaxGuests.TooLow", "Maximum guests must be at least 5.", "Validation");
+
+        public static readonly ResultError TooHigh =
+            new("EventMaxGuests.TooHigh", "Maximum guests cannot exceed 50.", "Validation");
+
+        public static readonly ResultError CannotReduceWhenActive =
+            new("EventMaxGuests.CannotReduceWhenActive", "Maximum guests cannot be reduced when the event is active.", "BusinessRule");
     }
 
     public static class Event
@@ -50,6 +56,18 @@ public static class EventErrors
 
         public static readonly ResultError CannotModifyCancelled =
             new("Event.Status.Cancelled", "A cancelled event cannot be modified.", "BusinessRule");
+    }
+
+    public static class Ready
+    {
+        public static readonly ResultError TitleIsDefault =
+            new("Event.Ready.TitleIsDefault", "Event title must be changed from the default 'Working Title' before it can be readied.", "BusinessRule");
+
+        public static readonly ResultError TimesNotSet =
+            new("Event.Ready.TimesNotSet", "Event times must be set before the event can be readied.", "BusinessRule");
+
+        public static readonly ResultError EventIsInThePast =
+            new("Event.Ready.EventIsInThePast", "An event with a start time in the past cannot be readied.", "BusinessRule");
     }
 
     public static class Times

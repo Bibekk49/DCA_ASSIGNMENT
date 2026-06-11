@@ -43,6 +43,6 @@ public class CommandHandlerAutoRegistrationTests
             d.ServiceType.IsGenericType &&
             d.ServiceType.GetGenericTypeDefinition() == typeof(ICommandHandler<>));
 
-        Assert.Equal(6, handlerCount); // UC1–UC6
+        Assert.Equal(9, handlerCount); // UC1–UC9
     }
 }

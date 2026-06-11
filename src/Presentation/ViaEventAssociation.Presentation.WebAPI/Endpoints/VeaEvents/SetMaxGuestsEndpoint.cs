@@ -7,24 +7,28 @@ using ViaEventAssociation.Presentation.WebAPI.Endpoints.Common;
 
 namespace ViaEventAssociation.Presentation.WebAPI.Endpoints.VeaEvents;
 
-public record UpdateDescriptionBody(string Description);
+public record SetMaxGuestsBody(int MaxGuests);
 
-public class UpdateDescriptionEndpoint(ICommandDispatcher dispatcher)
-    : ApiEndpoint.WithRequest<UpdateDescriptionBody>.AndResults<NoContent, BadRequest<IEnumerable<ResultError>>>
+public class SetMaxGuestsEndpoint(ICommandDispatcher dispatcher)
+    : ApiEndpoint.WithRequest<SetMaxGuestsBody>.AndResults<NoContent, BadRequest<IEnumerable<ResultError>>>
 {
-    /// <summary>Update event description (UC3)</summary>
-    /// <remarks>0–250 characters; empty string is valid. Blocked on ACTIVE, COMPLETED, or CANCELLED events. Reverts a READY event to DRAFT.</remarks>
-    /// <param name="request">New description (may be empty)</param>
-    /// <response code="204">Description updated</response>
+    /// <summary>Set maximum number of guests (UC7)</summary>
+    /// <remarks>
+    /// Valid range: 5–50. Reverts a READY event to DRAFT.
+    /// When ACTIVE: only increases are allowed (cannot reduce below current value).
+    /// Blocked on COMPLETED and CANCELLED events.
+    /// </remarks>
+    /// <param name="request">New maximum guest count (5–50)</param>
+    /// <response code="204">Max guests updated</response>
     /// <response code="400">Validation or business rule failure</response>
-    [HttpPost("events/{id}/update-description")]
+    [HttpPost("events/{id}/set-max-guests")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(typeof(IEnumerable<ResultError>), StatusCodes.Status400BadRequest)]
-    public override async Task<Results<NoContent, BadRequest<IEnumerable<ResultError>>>> HandleAsync(UpdateDescriptionBody request)
+    public override async Task<Results<NoContent, BadRequest<IEnumerable<ResultError>>>> HandleAsync(SetMaxGuestsBody request)
     {
         var id = HttpContext.Request.RouteValues["id"]?.ToString() ?? "";
-        var cmdResult = UpdateDescriptionCommand.Create(id, request.Description);
-        if (cmdResult is Failure<UpdateDescriptionCommand> f)
+        var cmdResult = SetMaxGuestsCommand.Create(id, request.MaxGuests);
+        if (cmdResult is Failure<SetMaxGuestsCommand> f)
             return TypedResults.BadRequest(f.Errors);
 
         var result = await dispatcher.DispatchAsync(cmdResult.Payload!);

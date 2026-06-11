@@ -23,7 +23,11 @@ public record ViewSingleEventResponse(
 public class ViewSingleEventEndpoint(IQueryDispatcher dispatcher, IMapper mapper)
     : ApiEndpoint.WithRequest<ViewSingleEventRequest>.AndResult<Ok<ViewSingleEventResponse>>
 {
+    /// <summary>Get a single event by ID</summary>
+    /// <param name="request">Event GUID in the route</param>
+    /// <response code="200">Event details</response>
     [HttpGet("events/{Id}")]
+    [ProducesResponseType(typeof(ViewSingleEventResponse), StatusCodes.Status200OK)]
     public override async Task<Ok<ViewSingleEventResponse>> HandleAsync(ViewSingleEventRequest request)
     {
         var query = mapper.Map<ViewSingleEvent.Query>(request);

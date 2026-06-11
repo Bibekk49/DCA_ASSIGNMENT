@@ -32,7 +32,12 @@ public record BrowseUpcomingEventsResponse(
 public class BrowseUpcomingEventsEndpoint(IQueryDispatcher dispatcher, IMapper mapper)
     : ApiEndpoint.WithRequest<BrowseUpcomingEventsRequest>.AndResult<Ok<BrowseUpcomingEventsResponse>>
 {
+    /// <summary>Browse upcoming public events (paginated)</summary>
+    /// <remarks>Returns PUBLIC events with a future start time, ordered by start date. Supports optional title search.</remarks>
+    /// <param name="request">Pagination and optional title filter</param>
+    /// <response code="200">Paginated list of upcoming events</response>
     [HttpGet("events")]
+    [ProducesResponseType(typeof(BrowseUpcomingEventsResponse), StatusCodes.Status200OK)]
     public override async Task<Ok<BrowseUpcomingEventsResponse>> HandleAsync(BrowseUpcomingEventsRequest request)
     {
         var query = mapper.Map<BrowseUpcomingEvents.Query>(request);

@@ -10,7 +10,13 @@ namespace ViaEventAssociation.Presentation.WebAPI.Endpoints.VeaEvents;
 public class CreateEventEndpoint(ICommandDispatcher dispatcher)
     : ApiEndpoint.WithoutRequest.AndResults<Ok<string>, BadRequest<IEnumerable<ResultError>>>
 {
+    /// <summary>Create a new event (UC1)</summary>
+    /// <remarks>Creates a DRAFT event with default values: title "Working Title", 5 max guests, PRIVATE visibility, no times.</remarks>
+    /// <response code="200">Returns the new event's GUID</response>
+    /// <response code="400">Domain validation errors</response>
     [HttpPost("events/create-event")]
+    [ProducesResponseType(typeof(string), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(IEnumerable<ResultError>), StatusCodes.Status400BadRequest)]
     public override async Task<Results<Ok<string>, BadRequest<IEnumerable<ResultError>>>> HandleAsync()
     {
         var cmdResult = CreateEventCommand.Create();
